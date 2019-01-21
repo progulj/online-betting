@@ -1,0 +1,103 @@
+.offer-bar{
+    background: #1f427a;
+    .offer-header-name{
+        background: #1f427a;
+        height: 30px;
+        width: 400px;
+        float: left;
+        color: beige;
+        text-align: center;
+        margin: 2px 0px 2px 0px
+    }
+    
+    .offer-option-header{
+        background: #1f427a;
+        height: 30px;
+        width: 80px;
+        float: left;
+        color: beige;
+        text-align: center;
+        margin: 2px 0px 2px 0px
+    }
+}
+.offer-data{
+    box-sizing: border-box;
+    float: left;
+    width: 800px;
+    background:  rgb(185, 193, 199);
+    .offer-option-name{
+        height: 30px;
+        width: 400px;
+        color: beige;
+        float: left;
+        text-align: center;
+    }
+    .offer-option-value{
+            background:  rgb(165, 179, 223);
+            height: 30px;
+            width: 80px;
+            float: left;
+            text-align: center;
+    }
+    .offer-option-selected{
+        background:  #1f427a;
+        color: beige;
+        height: 30px;
+        width: 80px;
+        float: left;
+        text-align: center;
+    }
+}
+
+.special-offer-bar{
+    padding-top: 4px;
+    background: #efefef;
+    float: left;
+    .special-offer-header-name{
+        background: #4f0c7c;
+        height: 30px;
+        width: 400px;
+        float: left;
+        color: beige;
+        text-align: center;
+        margin: 2px 0px 2px 0px
+    }
+    
+    .special-offer-option-header{
+        background: #4f0c7c;
+        height: 30px;
+        width: 80px;
+        float: left;
+        color: beige;
+        text-align: center;
+        margin: 2px 0px 2px 0px
+    }
+}
+.special-offer-data{
+    box-sizing: border-box;
+    float: left;
+    width: 800px;
+    background:  rgb(210, 159, 240);
+    .special-offer-option-name{
+        height: 30px;
+        width: 400px;
+        color: beige;
+        float: left;
+        text-align: center;
+    }
+    .special-offer-option-value{ 
+            background:  rgb(204, 98, 236);
+            height: 30px;
+            width: 80px;
+            float: left;
+            text-align: center;
+    }
+    .special-offer-option-selected{
+        background:  #4f0c7c;
+        color: beige;
+        height: 30px;
+        width: 80px;
+        float: left;
+        text-align: center;
+    }
+}

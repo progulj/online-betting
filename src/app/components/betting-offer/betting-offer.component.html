@@ -1,0 +1,65 @@
+<div class="offer-bar">
+  <div class="offer-header-name">Parovi</div>
+  <div class="offer-option-header">1</div>
+  <div class="offer-option-header">X</div>
+  <div class="offer-option-header">2</div>
+  <div class="offer-option-header">X1</div>
+  <div class="offer-option-header">X2</div>
+</div>
+<div class="offer-data" *ngFor="let offer of offers">
+  <div class="offer-option-name" >{{offer.pairName}}</div>
+  <div [ngClass]="{
+    'offer-option-value': !offer.option1Selected,
+    'offer-option-selected': offer.option1Selected
+  }"  (click)="selectClick1(offer)">{{offer.option1}}</div>
+  <div  [ngClass]="{
+    'offer-option-value': !offer.optionXSelected,
+    'offer-option-selected': offer.optionXSelected
+  }"   (click)="selectClickX(offer)">{{offer.optionX}}</div>
+  <div [ngClass]="{
+    'offer-option-value': !offer.option2Selected,
+    'offer-option-selected': offer.option2Selected
+  }"  (click)="selectClick2(offer)">{{offer.option2}}</div>
+  <div [ngClass]="{
+    'offer-option-value': !offer.optionX1Selected,
+    'offer-option-selected': offer.optionX1Selected
+  }"  (click)="selectClickX1(offer)">{{offer.optionX1}}</div>
+  <div [ngClass]="{
+    'offer-option-value': !offer.optionX2tSelected,
+    'offer-option-selected': offer.optionX2Selected
+  }"  (click)="selectClickX2(offer)">{{offer.optionX2}}</div>
+</div>
+
+<div class="special-offer-bar">
+  <div class="special-offer-header-name">Posebna Ponuda</div>
+  <div class="special-offer-option-header">1</div>
+  <div class="special-offer-option-header">X</div>
+  <div class="special-offer-option-header">2</div>
+  <div class="special-offer-option-header">X1</div>
+  <div class="special-offer-option-header">X2</div>
+</div>
+<div class="special-offer-data" *ngFor="let offer of offers ">
+  <div *ngIf="offer.special">
+    <div  class="special-offer-option-name">{{offer.pairName}}</div>
+    <div  [ngClass]="{
+      'special-offer-option-value': !offer.option1Selected,
+      'special-offer-option-selected': offer.option1Selected
+    }"  (click)="selectSpecialOffer1(offer)">{{offer.option1}}</div>
+    <div  [ngClass]="{
+      'special-offer-option-value': !offer.optionXSelected,
+      'special-offer-option-selected': offer.optionXSelected
+    }"  (click)="selectSpecialOfferX(offer)">{{offer.optionX}}</div>
+    <div  [ngClass]="{
+      'special-offer-option-value': !offer.option2Selected,
+      'special-offer-option-selected': offer.option2Selected
+    }"  (click)="selectSpecialOffer2(offer)">{{offer.option2}}</div>
+    <div  [ngClass]="{
+      'special-offer-option-value': !offer.optionX1tSelected,
+      'special-offer-option-selected': offer.optionX1Selected
+    }"  (click)="selectSpecialOfferX1(offer)">{{offer.optionX1}}</div>
+    <div  [ngClass]="{
+      'special-offer-option-value': !offer.optionX2tSelected,
+      'special-offer-option-selected': offer.optionX2Selected
+    }"  (click)="selectSpecialOfferX2(offer)">{{offer.optionX2}}</div>
+  </div>
+</div>
