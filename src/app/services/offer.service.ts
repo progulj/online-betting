@@ -12,7 +12,7 @@ export class OfferService {
   constructor() { }
   private subject = new Subject<any>();
 
-  unselectOffer(offerId: number) {
+  deselectOffer(offerId: number) {
       this.subject.next({id : offerId});
   }
 

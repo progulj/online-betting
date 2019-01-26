@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription} from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import { Offer } from '../../models/Offer';
 import { OfferService } from '../../services/offer.service';
@@ -11,12 +11,11 @@ import { TicketService } from '../../services/ticket.service';
   styleUrls: ['./betting-offer.component.scss']
 })
 export class BettingOfferComponent implements OnInit, OnDestroy {
-  offers: Offer [];
+  offers: Offer[];
   subscription: Subscription;
-  offerToUnselect: Offer;
   constructor(private offerService: OfferService, private ticketService: TicketService) {
     this.subscription = this.offerService.removeOfferSelection().subscribe(offer => {
-      this.unselectOffer(offer.id);
+      this.removeOfferSelection(offer.id);
     });
   }
 
@@ -26,26 +25,14 @@ export class BettingOfferComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-}
+  }
 
-  unselectOffer(id: number) {
-    this.offerToUnselect =  this.offers.find(offer =>  offer.id === id);
-    this.offerToUnselect.option1Selected = false;
-    this.offerToUnselect.optionXSelected = false;
-    this.offerToUnselect.option2Selected = false;
-    this.offerToUnselect.optionX1Selected = false;
-    this.offerToUnselect.optionX2Selected = false;
+  removeOfferSelection(id: number) {
+    const bettingOffer = this.offers.find(offer => offer.id === id);
+    this.deselectBettingOffer(bettingOffer);
     this.offers = this.offers.filter(offer => offer.id !== id);
-    this.offers.push(this.offerToUnselect);
-    this.offers.sort((n1, n2) => {
-      if (n1.id > n2.id) {
-          return 1;
-      }
-      if (n1.id < n2.id) {
-          return -1;
-      }
-      return 0;
-    });
+    this.offers.push(bettingOffer);
+    this.sortById();
   }
 
   getOffers(): void {
@@ -53,113 +40,143 @@ export class BettingOfferComponent implements OnInit, OnDestroy {
       .subscribe(offers => this.offers = offers);
   }
 
-  selectClick1(selectedOffer: Offer): void {
+  selectBettingOffer1(selectedOffer: Offer): void {
     if (selectedOffer.option1 !== '-') {
-      selectedOffer.option1Selected = !selectedOffer.option1Selected;
-      selectedOffer.optionXSelected = false;
-      selectedOffer.option2Selected = false;
-      selectedOffer.optionX1Selected = false;
-      selectedOffer.optionX2Selected = false;
-      this.ticketService.addNewPair(selectedOffer, selectedOffer.option1, '1', selectedOffer.option1Selected);
+      const toggleSelection = !selectedOffer.option1Selected;
+      this.deselectBettingOffer(selectedOffer);
+      selectedOffer.option1Selected = toggleSelection;
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.option1, '1', toggleSelection, false);
     }
   }
 
-  selectClickX(selectedOffer: Offer): void {
+  selectBettingOfferX(selectedOffer: Offer): void {
     if (selectedOffer.optionX !== '-') {
-      selectedOffer.optionXSelected = !selectedOffer.optionXSelected;
-      selectedOffer.option1Selected = false;
-      selectedOffer.option2Selected = false;
-      selectedOffer.optionX1Selected = false;
-      selectedOffer.optionX2Selected = false;
-      this.ticketService.addNewPair(selectedOffer, selectedOffer.optionX, 'X', selectedOffer.optionXSelected);
+      const toggleSelection = !selectedOffer.optionXSelected;
+      this.deselectBettingOffer(selectedOffer);
+      selectedOffer.optionXSelected = toggleSelection;
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.optionX, 'X', toggleSelection, false);
     }
   }
 
-  selectClick2(selectedOffer: Offer): void {
+  selectBettingOffer2(selectedOffer: Offer): void {
     if (selectedOffer.option2 !== '-') {
-      selectedOffer.option2Selected = !selectedOffer.option2Selected;
-      selectedOffer.option1Selected = false;
-      selectedOffer.optionXSelected = false;
-      selectedOffer.optionX1Selected = false;
-      selectedOffer.optionX2Selected = false;
-      this.ticketService.addNewPair(selectedOffer, selectedOffer.option2, '2', selectedOffer.option2Selected);
+      const toggleSelection = !selectedOffer.option2Selected;
+      this.deselectBettingOffer(selectedOffer);
+      selectedOffer.option2Selected = toggleSelection;
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.option2, '2', toggleSelection, false);
     }
   }
 
-  selectClickX1(selectedOffer: Offer): void {
+  selectBettingOfferX1(selectedOffer: Offer): void {
     if (selectedOffer.optionX1 !== '-') {
-      selectedOffer.optionX1Selected = !selectedOffer.optionX1Selected;
-      selectedOffer.option1Selected = false;
-      selectedOffer.optionXSelected = false;
-      selectedOffer.option2Selected = false;
-      selectedOffer.optionX2Selected = false;
-      this.ticketService.addNewPair(selectedOffer, selectedOffer.optionX1, 'X1', selectedOffer.optionX1Selected);
+      const toggleSelection = !selectedOffer.optionX1Selected;
+      this.deselectBettingOffer(selectedOffer);
+      selectedOffer.optionX1Selected = toggleSelection;
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.optionX1, 'X1', toggleSelection, false);
     }
   }
 
-  selectClickX2(selectedOffer: Offer): void {
+  selectBettingOfferX2(selectedOffer: Offer): void {
     if (selectedOffer.optionX2 !== '-') {
-      selectedOffer.optionX2Selected = !selectedOffer.optionX2Selected;
-      selectedOffer.option1Selected = false;
-      selectedOffer.optionXSelected = false;
-      selectedOffer.option2Selected = false;
-      selectedOffer.optionX1Selected = false;
-      this.ticketService.addNewPair(selectedOffer, selectedOffer.optionX2, 'X2', selectedOffer.optionX2Selected);
+      const toggleSelection = !selectedOffer.optionX2Selected;
+      this.deselectBettingOffer(selectedOffer);
+      selectedOffer.optionX2Selected = toggleSelection;
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.optionX2, 'X2', toggleSelection, false);
+    }
+  }
+
+  selectBettingOffer12(selectedOffer: Offer): void {
+    if (selectedOffer.option12 !== '-') {
+      const toggleSelection = !selectedOffer.optionX2Selected;
+      this.deselectBettingOffer(selectedOffer);
+      selectedOffer.option12Selected = toggleSelection;
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.option12, '12', toggleSelection, false);
     }
   }
 
   selectSpecialOffer1(selectedOffer: Offer): void {
     if (selectedOffer.option1 !== '-') {
-      selectedOffer.option1Selected = !selectedOffer.option1Selected;
-      selectedOffer.optionXSelected = false;
-      selectedOffer.option2Selected = false;
-      selectedOffer.optionX1Selected = false;
-      selectedOffer.optionX2Selected = false;
-      this.ticketService.addNewPair(selectedOffer, selectedOffer.option1, '1', selectedOffer.option1Selected);
+      const toggleSelection = !selectedOffer.specialOption1Selected;
+      this.deselectBettingOffer(selectedOffer);
+      selectedOffer.specialOption1Selected = toggleSelection;
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.specialOption1, '1', toggleSelection, true);
     }
   }
 
   selectSpecialOfferX(selectedOffer: Offer): void {
     if (selectedOffer.optionX !== '-') {
-      selectedOffer.optionXSelected = !selectedOffer.optionXSelected;
-      selectedOffer.option1Selected = false;
-      selectedOffer.option2Selected = false;
-      selectedOffer.optionX1Selected = false;
-      selectedOffer.optionX2Selected = false;
-      this.ticketService.addNewPair(selectedOffer, selectedOffer.optionX, 'X', selectedOffer.optionXSelected);
+      const toggleSelection = !selectedOffer.specialOptionXSelected;
+      this.deselectBettingOffer(selectedOffer);
+      selectedOffer.specialOptionXSelected = toggleSelection;
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.specialOptionX, 'X', toggleSelection, true);
     }
   }
 
   selectSpecialOffer2(selectedOffer: Offer): void {
     if (selectedOffer.option2 !== '-') {
-      selectedOffer.option2Selected = !selectedOffer.option2Selected;
-      selectedOffer.option1Selected = false;
-      selectedOffer.optionXSelected = false;
-      selectedOffer.optionX1Selected = false;
-      selectedOffer.optionX2Selected = false;
-      this.ticketService.addNewPair(selectedOffer, selectedOffer.option2, '2', selectedOffer.option2Selected);
+      const toggleSelection = !selectedOffer.specialOption2Selected;
+      this.deselectBettingOffer(selectedOffer);
+      selectedOffer.specialOption2Selected = toggleSelection;
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.specialOption2, '2', toggleSelection, true);
     }
   }
 
   selectSpecialOfferX1(selectedOffer: Offer): void {
     if (selectedOffer.optionX1 !== '-') {
-      selectedOffer.optionX1Selected = !selectedOffer.optionX1Selected;
-      selectedOffer.option1Selected = false;
-      selectedOffer.optionXSelected = false;
-      selectedOffer.option2Selected = false;
-      selectedOffer.optionX2Selected = false;
-      this.ticketService.addNewPair(selectedOffer, selectedOffer.optionX1, 'X1', selectedOffer.optionX1Selected);
+      const toggleSelection = !selectedOffer.specialOptionX1Selected;
+      this.deselectBettingOffer(selectedOffer);
+      selectedOffer.specialOptionX1Selected = toggleSelection;
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.specialOptionX1, 'X1', toggleSelection, true);
     }
   }
 
   selectSpecialOfferX2(selectedOffer: Offer): void {
-    if (selectedOffer.optionX2 !== '-') {
-      selectedOffer.optionX2Selected = !selectedOffer.optionX2Selected;
-      selectedOffer.option1Selected = false;
-      selectedOffer.optionXSelected = false;
-      selectedOffer.option2Selected = false;
-      selectedOffer.optionX1Selected = false;
-      this.ticketService.addNewPair(selectedOffer, selectedOffer.optionX2, 'X2', selectedOffer.optionX2Selected);
+    if (selectedOffer.specialOptionX2 !== '-') {
+      const toggleSelection = !selectedOffer.specialOptionX2Selected;
+      this.deselectBettingOffer(selectedOffer);
+      selectedOffer.specialOptionX2Selected = toggleSelection;
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.specialOptionX2, 'X2', toggleSelection, true);
     }
+  }
+
+  selectSpecialOffer12(selectedOffer: Offer): void {
+    if (selectedOffer.specialOption12 !== '-') {
+      const toggleSelection = !selectedOffer.specialOption12Selected;
+      this.deselectBettingOffer(selectedOffer);
+      selectedOffer.specialOption12Selected = toggleSelection;
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.specialOption12, '12', toggleSelection, true);
+    }
+  }
+
+  deselectBettingOffer(offer: Offer) {
+    offer.option1Selected = false;
+    offer.optionXSelected = false;
+    offer.option2Selected = false;
+    offer.optionX1Selected = false;
+    offer.optionX2Selected = false;
+    offer.option12Selected = false;
+
+    this.deselectSpecialOffer(offer);
+  }
+
+  deselectSpecialOffer(offer: Offer) {
+    offer.specialOption1Selected = false;
+    offer.specialOptionXSelected = false;
+    offer.specialOption2Selected = false;
+    offer.specialOptionX1Selected = false;
+    offer.specialOptionX2Selected = false;
+    offer.specialOption12Selected = false;
+  }
+
+  sortById(): void {
+    this.offers.sort((left, right) => {
+      if (left.id > right.id) {
+        return 1;
+      }
+      if (left.id < right.id) {
+        return -1;
+      }
+      return 0;
+    });
   }
 }

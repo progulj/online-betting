@@ -7,6 +7,9 @@
       <div class="pair-data-coefficient">{{pair.selectedCoefficient}}</div>
       <div class="pair-data-delete" (click)="deleteThisPair(pair)">x</div>
     </div>
+    <div [ngClass]="isErrorVisible ? 'show-special':'hide-special'">
+      You can select only one special offer per ticket!
+    </div>
     <div>{{ticket.fullPayment}}</div>
     <div>{{ticket.commission}}</div>
     <div>{{ticket.estimatedWin}}</div>
