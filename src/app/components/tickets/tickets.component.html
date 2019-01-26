@@ -1,3 +1,15 @@
-<p>
-  tickets works!
-</p>
+<div *ngIf="ticket">
+  <div *ngIf="ticket.pairs">
+
+    <div class="pair-data" *ngFor="let pair of ticket.pairs">
+      <div class="pair-data-name">{{pair.pairName}}</div>
+      <div class="pair-data-option">{{pair.selectedOptionName}}</div>
+      <div class="pair-data-coefficient">{{pair.selectedCoefficient}}</div>
+      <div class="pair-data-delete" (click)="deleteThisPair(pair)">x</div>
+    </div>
+    <div>{{ticket.fullPayment}}</div>
+    <div>{{ticket.commission}}</div>
+    <div>{{ticket.estimatedWin}}</div>
+  </div>
+
+</div>

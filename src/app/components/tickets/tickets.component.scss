@@ -1,0 +1,27 @@
+.pair-data{
+    box-sizing: border-box;
+    float: left;
+    width: 100%;
+    font-size: 12px;
+    .pair-data-name{
+        float: left;
+        width: 70%;
+        text-align: left;
+
+    }
+    .pair-data-option{ 
+        width: 10%;
+        float: left;
+        text-align: center;
+    }
+    .pair-data-coefficient{
+        width: 10%;
+        float: left;
+        text-align: center;
+    }
+    .pair-data-delete{
+        width: 10%;
+        float: left;
+        text-align: center;
+    }
+}    

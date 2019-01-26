@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { Offer } from '../../models/Offer';
 import { OfferService } from '../../services/offer.service';
+import { TicketService } from '../../services/ticket.service';
 
 @Component({
   selector: 'app-betting-offer',
@@ -10,7 +11,7 @@ import { OfferService } from '../../services/offer.service';
 })
 export class BettingOfferComponent implements OnInit {
   offers: Offer [];
-  constructor(private offerService: OfferService) { }
+  constructor(private offerService: OfferService, private ticketService: TicketService) { }
 
   ngOnInit() {
     this.getOffers();
@@ -28,6 +29,7 @@ export class BettingOfferComponent implements OnInit {
       selectedOffer.option2Selected = false;
       selectedOffer.optionX1Selected = false;
       selectedOffer.optionX2Selected = false;
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.option1, '1');
     }
   }
 
@@ -38,6 +40,7 @@ export class BettingOfferComponent implements OnInit {
       selectedOffer.option2Selected = false;
       selectedOffer.optionX1Selected = false;
       selectedOffer.optionX2Selected = false;
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.optionX, 'X');
     }
   }
 
@@ -48,6 +51,7 @@ export class BettingOfferComponent implements OnInit {
       selectedOffer.optionXSelected = false;
       selectedOffer.optionX1Selected = false;
       selectedOffer.optionX2Selected = false;
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.option2, '2');
     }
   }
 
@@ -58,6 +62,7 @@ export class BettingOfferComponent implements OnInit {
       selectedOffer.optionXSelected = false;
       selectedOffer.option2Selected = false;
       selectedOffer.optionX2Selected = false;
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.optionX1, 'X1');
     }
   }
 
@@ -68,6 +73,7 @@ export class BettingOfferComponent implements OnInit {
       selectedOffer.optionXSelected = false;
       selectedOffer.option2Selected = false;
       selectedOffer.optionX1Selected = false;
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.optionX2, 'X2');
     }
   }
 
@@ -78,6 +84,7 @@ export class BettingOfferComponent implements OnInit {
       selectedOffer.option2Selected = false;
       selectedOffer.optionX1Selected = false;
       selectedOffer.optionX2Selected = false;
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.option1, '1');
     }
   }
 
@@ -88,6 +95,7 @@ export class BettingOfferComponent implements OnInit {
       selectedOffer.option2Selected = false;
       selectedOffer.optionX1Selected = false;
       selectedOffer.optionX2Selected = false;
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.optionX, 'X');
     }
   }
 
@@ -98,6 +106,7 @@ export class BettingOfferComponent implements OnInit {
       selectedOffer.optionXSelected = false;
       selectedOffer.optionX1Selected = false;
       selectedOffer.optionX2Selected = false;
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.option2, '2');
     }
   }
 
@@ -108,6 +117,7 @@ export class BettingOfferComponent implements OnInit {
       selectedOffer.optionXSelected = false;
       selectedOffer.option2Selected = false;
       selectedOffer.optionX2Selected = false;
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.optionX1, 'X1');
     }
   }
 
@@ -118,6 +128,7 @@ export class BettingOfferComponent implements OnInit {
       selectedOffer.optionXSelected = false;
       selectedOffer.option2Selected = false;
       selectedOffer.optionX1Selected = false;
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.optionX2, 'X2');
     }
   }
 }
