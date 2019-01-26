@@ -11,14 +11,14 @@ export class TicketService {
 
   private subject = new Subject<any>();
 
-  addNewPair(selectedPair: Offer, selectedType: string, selectedCoefficient: string) {
+  addNewPair(selectedPair: Offer, selectedType: string, selectedCoefficient: string,  addRemoveFlag: boolean) {
       const newPair = new Pair();
-      newPair.id = selectedPair.id;
+      newPair.offerId = selectedPair.id;
       newPair.pairName = selectedPair.pairName;
       newPair.selectedOptionName = selectedType;
       newPair.selectedCoefficient = selectedCoefficient;
 
-      this.subject.next(newPair);
+      this.subject.next({newPair: newPair, addRemove: addRemoveFlag});
   }
 
   getPairs(): Observable<any> {

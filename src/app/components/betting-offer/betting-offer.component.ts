@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription} from 'rxjs';
 
 import { Offer } from '../../models/Offer';
 import { OfferService } from '../../services/offer.service';
@@ -9,12 +10,42 @@ import { TicketService } from '../../services/ticket.service';
   templateUrl: './betting-offer.component.html',
   styleUrls: ['./betting-offer.component.scss']
 })
-export class BettingOfferComponent implements OnInit {
+export class BettingOfferComponent implements OnInit, OnDestroy {
   offers: Offer [];
-  constructor(private offerService: OfferService, private ticketService: TicketService) { }
+  subscription: Subscription;
+  offerToUnselect: Offer;
+  constructor(private offerService: OfferService, private ticketService: TicketService) {
+    this.subscription = this.offerService.removeOfferSelection().subscribe(offer => {
+      this.unselectOffer(offer.id);
+    });
+  }
 
   ngOnInit() {
     this.getOffers();
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+}
+
+  unselectOffer(id: number) {
+    this.offerToUnselect =  this.offers.find(offer =>  offer.id === id);
+    this.offerToUnselect.option1Selected = false;
+    this.offerToUnselect.optionXSelected = false;
+    this.offerToUnselect.option2Selected = false;
+    this.offerToUnselect.optionX1Selected = false;
+    this.offerToUnselect.optionX2Selected = false;
+    this.offers = this.offers.filter(offer => offer.id !== id);
+    this.offers.push(this.offerToUnselect);
+    this.offers.sort((n1, n2) => {
+      if (n1.id > n2.id) {
+          return 1;
+      }
+      if (n1.id < n2.id) {
+          return -1;
+      }
+      return 0;
+    });
   }
 
   getOffers(): void {
@@ -29,7 +60,7 @@ export class BettingOfferComponent implements OnInit {
       selectedOffer.option2Selected = false;
       selectedOffer.optionX1Selected = false;
       selectedOffer.optionX2Selected = false;
-      this.ticketService.addNewPair(selectedOffer, selectedOffer.option1, '1');
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.option1, '1', selectedOffer.option1Selected);
     }
   }
 
@@ -40,7 +71,7 @@ export class BettingOfferComponent implements OnInit {
       selectedOffer.option2Selected = false;
       selectedOffer.optionX1Selected = false;
       selectedOffer.optionX2Selected = false;
-      this.ticketService.addNewPair(selectedOffer, selectedOffer.optionX, 'X');
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.optionX, 'X', selectedOffer.optionXSelected);
     }
   }
 
@@ -51,7 +82,7 @@ export class BettingOfferComponent implements OnInit {
       selectedOffer.optionXSelected = false;
       selectedOffer.optionX1Selected = false;
       selectedOffer.optionX2Selected = false;
-      this.ticketService.addNewPair(selectedOffer, selectedOffer.option2, '2');
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.option2, '2', selectedOffer.option2Selected);
     }
   }
 
@@ -62,7 +93,7 @@ export class BettingOfferComponent implements OnInit {
       selectedOffer.optionXSelected = false;
       selectedOffer.option2Selected = false;
       selectedOffer.optionX2Selected = false;
-      this.ticketService.addNewPair(selectedOffer, selectedOffer.optionX1, 'X1');
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.optionX1, 'X1', selectedOffer.optionX1Selected);
     }
   }
 
@@ -73,7 +104,7 @@ export class BettingOfferComponent implements OnInit {
       selectedOffer.optionXSelected = false;
       selectedOffer.option2Selected = false;
       selectedOffer.optionX1Selected = false;
-      this.ticketService.addNewPair(selectedOffer, selectedOffer.optionX2, 'X2');
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.optionX2, 'X2', selectedOffer.optionX2Selected);
     }
   }
 
@@ -84,7 +115,7 @@ export class BettingOfferComponent implements OnInit {
       selectedOffer.option2Selected = false;
       selectedOffer.optionX1Selected = false;
       selectedOffer.optionX2Selected = false;
-      this.ticketService.addNewPair(selectedOffer, selectedOffer.option1, '1');
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.option1, '1', selectedOffer.option1Selected);
     }
   }
 
@@ -95,7 +126,7 @@ export class BettingOfferComponent implements OnInit {
       selectedOffer.option2Selected = false;
       selectedOffer.optionX1Selected = false;
       selectedOffer.optionX2Selected = false;
-      this.ticketService.addNewPair(selectedOffer, selectedOffer.optionX, 'X');
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.optionX, 'X', selectedOffer.optionXSelected);
     }
   }
 
@@ -106,7 +137,7 @@ export class BettingOfferComponent implements OnInit {
       selectedOffer.optionXSelected = false;
       selectedOffer.optionX1Selected = false;
       selectedOffer.optionX2Selected = false;
-      this.ticketService.addNewPair(selectedOffer, selectedOffer.option2, '2');
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.option2, '2', selectedOffer.option2Selected);
     }
   }
 
@@ -117,7 +148,7 @@ export class BettingOfferComponent implements OnInit {
       selectedOffer.optionXSelected = false;
       selectedOffer.option2Selected = false;
       selectedOffer.optionX2Selected = false;
-      this.ticketService.addNewPair(selectedOffer, selectedOffer.optionX1, 'X1');
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.optionX1, 'X1', selectedOffer.optionX1Selected);
     }
   }
 
@@ -128,7 +159,7 @@ export class BettingOfferComponent implements OnInit {
       selectedOffer.optionXSelected = false;
       selectedOffer.option2Selected = false;
       selectedOffer.optionX1Selected = false;
-      this.ticketService.addNewPair(selectedOffer, selectedOffer.optionX2, 'X2');
+      this.ticketService.addNewPair(selectedOffer, selectedOffer.optionX2, 'X2', selectedOffer.optionX2Selected);
     }
   }
 }

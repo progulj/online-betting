@@ -10,6 +10,15 @@ import { OFFERS } from '../models/mock-data';
 export class OfferService {
 
   constructor() { }
+  private subject = new Subject<any>();
+
+  unselectOffer(offerId: number) {
+      this.subject.next({id : offerId});
+  }
+
+  removeOfferSelection(): Observable<any> {
+    return this.subject.asObservable();
+  }
 
   getOffers(): Observable<Offer[]> {
     return of(OFFERS);
