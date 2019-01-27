@@ -1,5 +1,5 @@
 export class Pair {
-    id: number;
+    date: number;
     offerId: number;
     pairName: string;
     selectedOptionName: string;

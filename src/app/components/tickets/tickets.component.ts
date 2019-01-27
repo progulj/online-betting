@@ -5,6 +5,7 @@ import { Ticket } from '../../models/Ticket';
 import { Pair } from '../../models/Pair';
 import { OfferService } from '../../services/offer.service';
 import { TicketService } from '../../services/ticket.service';
+import { getLocaleDateTimeFormat } from '@angular/common';
 
 @Component({
   selector: 'app-tickets',
@@ -40,33 +41,33 @@ export class TicketsComponent implements OnInit, OnDestroy {
       if (this.pair) {
         if (addRemoveFlag) {
           const specialOffers = this.ticket.pairs.filter(offer => offer.special === true);
-          if (specialOffers.length > 0 && newPair.special) {
+          if (specialOffers.length > 0 && newPair.special && newPair.offerId !== specialOffers[0].offerId) {
             this.isErrorVisible = true;
-            this.offerService.deselectOffer(newPair.offerId);
+            this.offerService.deselectOffer(newPair.offerId, true, this.pair.selectedOptionName);
           } else {
-            this.ticket.pairs = this.ticket.pairs.filter(offer => offer.id !== this.pair.id);
-            newPair.id = this.pair.id;
+            this.ticket.pairs = this.ticket.pairs.filter(offer => offer.offerId !== this.pair.offerId);
+            newPair.date = this.pair.date;
             this.ticket.pairs.push(newPair);
             this.ticket.pairs.sort((n1, n2) => {
-              if (n1.id > n2.id) {
+              if (n1.date > n2.date) {
                 return 1;
               }
-              if (n1.id < n2.id) {
+              if (n1.date < n2.date) {
                 return -1;
               }
               return 0;
             });
           }
         } else {
-          this.ticket.pairs = this.ticket.pairs.filter(offer => offer.id !== this.pair.id);
+          this.ticket.pairs = this.ticket.pairs.filter(offer => offer.offerId !== this.pair.offerId);
         }
       } else {
         const specialOffers = this.ticket.pairs.filter(offer => offer.special === true);
         if (specialOffers.length > 0 && newPair.special) {
           this.isErrorVisible = true;
-          this.offerService.deselectOffer(newPair.offerId);
+          this.offerService.deselectOffer(newPair.offerId, true, '-');
         } else {
-          newPair.id = this.ticket.pairs.length + 1;
+          newPair.date = Date.now();
           this.ticket.pairs.push(newPair);
         }
       }
@@ -74,12 +75,12 @@ export class TicketsComponent implements OnInit, OnDestroy {
   }
   deleteThisPair(pairToDelete: Pair) {
     this.removePair(pairToDelete);
-    this.offerService.deselectOffer(pairToDelete.offerId);
+    this.offerService.deselectOffer(pairToDelete.offerId, false, '-');
     this.isErrorVisible = false;
   }
 
   removePair = (pairToDelete: Pair): void => {
-    this.ticket.pairs = this.ticket.pairs.filter(pair => pair.id !== pairToDelete.id);
+    this.ticket.pairs = this.ticket.pairs.filter(pair => pair.offerId !== pairToDelete.offerId);
   }
 
 }

@@ -12,8 +12,8 @@ export class OfferService {
   constructor() { }
   private subject = new Subject<any>();
 
-  deselectOffer(offerId: number) {
-      this.subject.next({id : offerId});
+  deselectOffer(offerId: number, specialOnly: boolean, type: string) {
+      this.subject.next({id : offerId, deselectSpecial : specialOnly, selectionToRevert: type});
   }
 
   removeOfferSelection(): Observable<any> {

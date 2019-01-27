@@ -5,4 +5,5 @@ export class Ticket {
     commission: string;
     estimatedWin: string;
     pairs: Pair [];
+    date: number;
 }

@@ -15,7 +15,7 @@ export class BettingOfferComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   constructor(private offerService: OfferService, private ticketService: TicketService) {
     this.subscription = this.offerService.removeOfferSelection().subscribe(offer => {
-      this.removeOfferSelection(offer.id);
+      this.removeOfferSelection(offer.id, offer.deselectSpecial, offer.selectionToRevert);
     });
   }
 
@@ -27,9 +27,14 @@ export class BettingOfferComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  removeOfferSelection(id: number) {
+  removeOfferSelection(id: number, deselectSpecial: boolean, selectionToRevert: string) {
     const bettingOffer = this.offers.find(offer => offer.id === id);
-    this.deselectBettingOffer(bettingOffer);
+    if (deselectSpecial) {
+      this.deselectSpecialOffer(bettingOffer);
+      this.revertSelectionOnBettingOffer(selectionToRevert, bettingOffer);
+    } else {
+      this.deselectBettingOffer(bettingOffer);
+    }
     this.offers = this.offers.filter(offer => offer.id !== id);
     this.offers.push(bettingOffer);
     this.sortById();
@@ -166,6 +171,22 @@ export class BettingOfferComponent implements OnInit, OnDestroy {
     offer.specialOptionX1Selected = false;
     offer.specialOptionX2Selected = false;
     offer.specialOption12Selected = false;
+  }
+
+  revertSelectionOnBettingOffer(selection: string, offer: Offer) {
+    if ('X' === selection) {
+      offer.optionXSelected = true;
+    } else if ('X1' === selection) {
+      offer.optionX1Selected = true;
+    } else if ('X2' === selection) {
+      offer.optionX2Selected = true;
+    } else if ('1' === selection) {
+      offer.option1Selected = true;
+    } else if ('2' === selection) {
+      offer.option2Selected = true;
+    } else if ('12' === selection) {
+      offer.option12Selected = true;
+    }
   }
 
   sortById(): void {
