@@ -1,4 +1,4 @@
-<div *ngIf="ticket">
+<div tabindex="-1"  *ngIf="ticket" (mouseout)="resetWarnings()">
   <div *ngIf="ticket.pairs">
 
     <div class="pair-data" *ngFor="let pair of ticket.pairs">
@@ -7,12 +7,18 @@
       <div class="pair-data-coefficient">{{pair.selectedCoefficient}}</div>
       <div class="pair-data-delete" (click)="deleteThisPair(pair)">x</div>
     </div>
-    <div [ngClass]="isErrorVisible ? 'show-special':'hide-special'">
-      You can select only one special offer per ticket!
+    <div *ngIf="isSecondSpecial">
+      You can select only one TOP OFFER per ticket!
     </div>
-    <div>{{ticket.fullPayment}}</div>
-    <div>{{ticket.commission}}</div>
-    <div>{{ticket.estimatedWin}}</div>
+    <div>{{ticket.totalCoefficient}}</div>
+    <input type="textbox" [(ngModel)]="ticket.fullPayment" appTwoDigitDecimalNumber>
+    <div>{{ticket.commission | multiplyOnFly: ticket.fullPayment}}</div>
+    <div>{{ticket.commission | estimatedWin: ticket.fullPayment:ticket.totalCoefficient}}</div>
+    <button (click)="playTicket()"> Play</button>
+    <div *ngIf="isNothingSelected">Please select at least one pair</div>
+    <div *ngIf="isNegativeBalance">Insufficient funds! Please top-up your wallet balance!</div>
+    <div *ngIf="isSpecialConditionNotMet">Need five regular offers with coefficient 1.10 or more!</div>
+    
   </div>
 
 </div>

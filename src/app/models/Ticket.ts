@@ -1,9 +1,10 @@
 import { Pair } from '../models/Pair';
 export class Ticket {
     id: number;
-    fullPayment: string;
-    commission: string;
-    estimatedWin: string;
+    totalCoefficient: number;
+    fullPayment: number;
+    commission: number;
+    estimatedWin: number;
     pairs: Pair [];
     date: number;
 }
