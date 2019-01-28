@@ -20,7 +20,7 @@ export class TicketsComponent implements OnInit, OnDestroy {
   private isNothingSelected: boolean;
   private isNegativeBalance: boolean;
   private isSpecialConditionNotMet: boolean;
-  private walletBalance: number;
+  private wallet: any;
 
   constructor(private offerService: OfferService, private ticketService: TicketService,
     private pairService: PairService, private walletService: WalletService) {
@@ -39,8 +39,11 @@ export class TicketsComponent implements OnInit, OnDestroy {
     this.isNothingSelected = false;
     this.isNegativeBalance = false;
     this.isSpecialConditionNotMet = false;
-    this.subscription = this.walletService.returnWalletFunds().subscribe(
-      data => this.walletBalance = data.walletBalance );
+
+    this.walletService.wallet$.subscribe(
+      wallet => {
+        this.wallet = wallet;
+      });
   }
 
   ngOnDestroy() {
@@ -66,7 +69,7 @@ export class TicketsComponent implements OnInit, OnDestroy {
               }
            }
            if (limit > 5) {
-            if (this.ticket.fullPayment > this.walletBalance) {
+            if (this.ticket.fullPayment > this.wallet.walletBalance) {
               this.isNegativeBalance = true;
             } else {
                this.ticketService.playTicket(this.ticket);
@@ -78,7 +81,7 @@ export class TicketsComponent implements OnInit, OnDestroy {
         );
 
       } else {
-        if (this.ticket.fullPayment > this.walletBalance) {
+        if (this.ticket.fullPayment > this.wallet.walletBalance) {
           this.isNegativeBalance = true;
         } else {
            this.ticketService.playTicket(this.ticket);

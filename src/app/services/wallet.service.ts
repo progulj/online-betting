@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Wallet } from '../models/Wallet';
 
 const httpOptions = {
   headers: new HttpHeaders({
-    'Content-Type':  'application/json',
+    'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'POST,GET, OPTIONS,DELETE'
   })
@@ -15,19 +14,47 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class WalletService {
-  private subject = new Subject<any>();
+
+  public wallet: IWallet;
+  private walletSubject: Subject<IWallet>;
+  public wallet$: Observable<IWallet>;
   private walletUrl: string;
 
   constructor(
     private httpClient: HttpClient) {
     this.walletUrl = 'http://localhost:3000/api/wallet';
-  }
-  addFundsToWallet (wallet: Wallet): Observable<any> {
-    return this.httpClient.post(this.walletUrl, wallet, httpOptions);
+    this.walletSubject = new Subject<IWallet>();
+    this.wallet$ = this.walletSubject.asObservable();
   }
 
-  returnWalletFunds():  Observable<any> {
-    return this.httpClient.get(this.walletUrl);
+  post(wallet: IWallet): void {
+    this.httpClient.post(this.walletUrl, wallet, httpOptions).subscribe(successData => {
+      this.wallet = successData as IWallet;
+      this.walletSubject.next(this.wallet);
+    }, errData => {
+      console.log(`Error while updateing wallet balance->${errData}`);
+    }
+    );
+  }
+
+
+  get() {
+
+    return this.httpClient.get(this.walletUrl).subscribe(
+      successData => {
+        this.wallet = successData as IWallet;
+        this.walletSubject.next(this.wallet);
+      },
+      errData => {
+        console.log(`Error while getting wallet balance->${errData}`);
+      }
+    );
   }
 
 }
+interface IWallet {
+  id: number;
+  walletBalance: number;
+}
+
+

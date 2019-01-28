@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 
 import { WalletService } from '../../services/wallet.service';
 import { Wallet } from '../../models/Wallet';
@@ -9,30 +9,24 @@ import { Wallet } from '../../models/Wallet';
   templateUrl: './wallet.component.html',
   styleUrls: ['./wallet.component.scss']
 })
-export class WalletComponent implements  OnInit, OnDestroy {
-  subscription: Subscription;
+export class WalletComponent implements  OnInit {
   private amount: number;
-  private walletBalance: number;
-  private wallet: Wallet;
+  private wallet: any;
 
   constructor(private walletService: WalletService) {
   }
-  ngOnInit() {
-    this.subscription = this.walletService.returnWalletFunds().subscribe(
-      data => this.walletBalance = data.walletBalance );
-    this.wallet = new Wallet();
-  }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
+  ngOnInit() {
+    this.walletService.wallet$.subscribe(
+      wallet => {
+        this.wallet = wallet;
+      });
+      this.walletService.get();
   }
 
   addFunds(): void {
-    this.wallet.walletBalance = this.walletBalance + +this.amount;
-    this.walletService.addFundsToWallet(this.wallet)
-    .subscribe(data => {
-      this.walletBalance += this.amount;
-    });
+    this.wallet.walletBalance = this.wallet.walletBalance + +this.amount;
+    this.walletService.post(this.wallet);
   }
 
 }

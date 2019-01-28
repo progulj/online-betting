@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { WalletService } from '../../services/wallet.service';
@@ -8,19 +8,20 @@ import { WalletService } from '../../services/wallet.service';
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.scss']
 })
-export class NavComponent implements OnInit, OnDestroy {
+export class NavComponent implements OnInit {
 
   subscription: Subscription;
-  walletBalance: number;
+  wallet: any;
 
   constructor(private walletService: WalletService) {
-    this.subscription = this.walletService.returnWalletFunds().subscribe(data => this.walletBalance = data.walletBalance);
   }
   ngOnInit() {
+    this.walletService.wallet$.subscribe(
+      wallet => {
+        this.wallet.walletBalance = wallet.walletBalance;
+      });
+      this.walletService.get();
   }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
 
 }
