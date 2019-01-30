@@ -1,31 +1,28 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
-
-import { Offer } from '../../models/Offer';
+import { Component, OnInit } from '@angular/core';
+import { IOfferView } from '../../interfaces/IOffer';
 import { OfferService } from '../../services/offer.service';
-import { PairService } from '../../services/ticket.service';
+import { TicketService } from '../../services/ticket.service';
 
 @Component({
   selector: 'app-betting-offer',
   templateUrl: './betting-offer.component.html',
   styleUrls: ['./betting-offer.component.scss']
 })
-export class BettingOfferComponent implements OnInit, OnDestroy {
-  offers: Offer[];
-  subscription: Subscription;
-  constructor(private offerService: OfferService, private pairService: PairService) {
-    this.subscription = this.offerService.removeOfferSelection().subscribe(offer => {
-      this.removeOfferSelection(offer.id, offer.deselectSpecial, offer.selectionToRevert);
-    });
+export class BettingOfferComponent implements OnInit {
+  offers: IOfferView[];
+  constructor(private offerService: OfferService, private ticketService: TicketService) {
   }
 
   ngOnInit() {
+    this.offers = [];
     this.getOffers();
+    this.offerService.offer$.subscribe(
+      offer => {
+        this.removeOfferSelection(offer.id, offer.deselectSpecial, offer.selectionToRevert);
+      });
   }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
+
 
   removeOfferSelection(id: number, deselectSpecial: boolean, selectionToRevert: string) {
     const bettingOffer = this.offers.find(offer => offer.id === id);
@@ -41,151 +38,151 @@ export class BettingOfferComponent implements OnInit, OnDestroy {
   }
 
   getOffers(): void {
-    this.offerService.getOffers()
-      .subscribe(offers => this.offers = offers);
+    this.offerService.offers$.subscribe(offers => this.offers = offers);
+    this.offerService.getOffers();
   }
 
-  selectBettingOffer1(selectedOffer: Offer): void {
-    if (selectedOffer.option1 !== '-') {
-      const toggleSelection = !selectedOffer.option1Selected;
+  selectBettingOffer1(selectedOffer: IOfferView): void {
+    if (selectedOffer.oddsFor1 !== '-') {
+      const toggleSelection = !selectedOffer.oddsFor1Selected;
       this.deselectBettingOffer(selectedOffer);
-      selectedOffer.option1Selected = toggleSelection;
-      this.pairService.addNewPair(selectedOffer, selectedOffer.option1, '1', toggleSelection, false);
+      selectedOffer.oddsFor1Selected = toggleSelection;
+      this.ticketService.addGame(selectedOffer, selectedOffer.oddsFor1, '1', toggleSelection, false);
     }
   }
 
-  selectBettingOfferX(selectedOffer: Offer): void {
-    if (selectedOffer.optionX !== '-') {
-      const toggleSelection = !selectedOffer.optionXSelected;
+  selectBettingOfferX(selectedOffer: IOfferView): void {
+    if (selectedOffer.oddsForX !== '-') {
+      const toggleSelection = !selectedOffer.oddsForXSelected;
       this.deselectBettingOffer(selectedOffer);
-      selectedOffer.optionXSelected = toggleSelection;
-      this.pairService.addNewPair(selectedOffer, selectedOffer.optionX, 'X', toggleSelection, false);
+      selectedOffer.oddsForXSelected = toggleSelection;
+      this.ticketService.addGame(selectedOffer, selectedOffer.oddsForX, 'X', toggleSelection, false);
     }
   }
 
-  selectBettingOffer2(selectedOffer: Offer): void {
-    if (selectedOffer.option2 !== '-') {
-      const toggleSelection = !selectedOffer.option2Selected;
+  selectBettingOffer2(selectedOffer: IOfferView): void {
+    if (selectedOffer.oddsFor2 !== '-') {
+      const toggleSelection = !selectedOffer.oddsFor2Selected;
       this.deselectBettingOffer(selectedOffer);
-      selectedOffer.option2Selected = toggleSelection;
-      this.pairService.addNewPair(selectedOffer, selectedOffer.option2, '2', toggleSelection, false);
+      selectedOffer.oddsFor2Selected = toggleSelection;
+      this.ticketService.addGame(selectedOffer, selectedOffer.oddsFor2, '2', toggleSelection, false);
     }
   }
 
-  selectBettingOfferX1(selectedOffer: Offer): void {
-    if (selectedOffer.optionX1 !== '-') {
-      const toggleSelection = !selectedOffer.optionX1Selected;
+  selectBettingOfferX1(selectedOffer: IOfferView): void {
+    if (selectedOffer.oddsForX1 !== '-') {
+      const toggleSelection = !selectedOffer.oddsForX1Selected;
       this.deselectBettingOffer(selectedOffer);
-      selectedOffer.optionX1Selected = toggleSelection;
-      this.pairService.addNewPair(selectedOffer, selectedOffer.optionX1, 'X1', toggleSelection, false);
+      selectedOffer.oddsForX1Selected = toggleSelection;
+      this.ticketService.addGame(selectedOffer, selectedOffer.oddsForX1, 'X1', toggleSelection, false);
     }
   }
 
-  selectBettingOfferX2(selectedOffer: Offer): void {
-    if (selectedOffer.optionX2 !== '-') {
-      const toggleSelection = !selectedOffer.optionX2Selected;
+  selectBettingOfferX2(selectedOffer: IOfferView): void {
+    if (selectedOffer.oddsForX2 !== '-') {
+      const toggleSelection = !selectedOffer.oddsForX2Selected;
       this.deselectBettingOffer(selectedOffer);
-      selectedOffer.optionX2Selected = toggleSelection;
-      this.pairService.addNewPair(selectedOffer, selectedOffer.optionX2, 'X2', toggleSelection, false);
+      selectedOffer.oddsForX2Selected = toggleSelection;
+      this.ticketService.addGame(selectedOffer, selectedOffer.oddsForX2, 'X2', toggleSelection, false);
     }
   }
 
-  selectBettingOffer12(selectedOffer: Offer): void {
-    if (selectedOffer.option12 !== '-') {
-      const toggleSelection = !selectedOffer.option12Selected;
+  selectBettingOffer12(selectedOffer: IOfferView): void {
+    if (selectedOffer.oddsFor12 !== '-') {
+      const toggleSelection = !selectedOffer.oddsFor12Selected;
       this.deselectBettingOffer(selectedOffer);
-      selectedOffer.option12Selected = toggleSelection;
-      this.pairService.addNewPair(selectedOffer, selectedOffer.option12, '12', toggleSelection, false);
+      selectedOffer.oddsFor12Selected = toggleSelection;
+      this.ticketService.addGame(selectedOffer, selectedOffer.oddsFor12, '12', toggleSelection, false);
     }
   }
 
-  selectSpecialOffer1(selectedOffer: Offer): void {
-    if (selectedOffer.option1 !== '-') {
-      const toggleSelection = !selectedOffer.specialOption1Selected;
+  selectSpecialOffer1(selectedOffer: IOfferView): void {
+    if (selectedOffer.oddsFor1 !== '-') {
+      const toggleSelection = !selectedOffer.specialOddsFor1Selected;
       this.deselectBettingOffer(selectedOffer);
-      selectedOffer.specialOption1Selected = toggleSelection;
-      this.pairService.addNewPair(selectedOffer, selectedOffer.specialOption1, '1', toggleSelection, true);
+      selectedOffer.specialOddsFor1Selected = toggleSelection;
+      this.ticketService.addGame(selectedOffer, selectedOffer.specialOddsFor1, '1', toggleSelection, true);
     }
   }
 
-  selectSpecialOfferX(selectedOffer: Offer): void {
-    if (selectedOffer.optionX !== '-') {
-      const toggleSelection = !selectedOffer.specialOptionXSelected;
+  selectSpecialOfferX(selectedOffer: IOfferView): void {
+    if (selectedOffer.oddsForX !== '-') {
+      const toggleSelection = !selectedOffer.specialOddsForXSelected;
       this.deselectBettingOffer(selectedOffer);
-      selectedOffer.specialOptionXSelected = toggleSelection;
-      this.pairService.addNewPair(selectedOffer, selectedOffer.specialOptionX, 'X', toggleSelection, true);
+      selectedOffer.specialOddsForXSelected = toggleSelection;
+      this.ticketService.addGame(selectedOffer, selectedOffer.specialOddsForX, 'X', toggleSelection, true);
     }
   }
 
-  selectSpecialOffer2(selectedOffer: Offer): void {
-    if (selectedOffer.option2 !== '-') {
-      const toggleSelection = !selectedOffer.specialOption2Selected;
+  selectSpecialOffer2(selectedOffer: IOfferView): void {
+    if (selectedOffer.oddsFor2 !== '-') {
+      const toggleSelection = !selectedOffer.specialOddsFor2Selected;
       this.deselectBettingOffer(selectedOffer);
-      selectedOffer.specialOption2Selected = toggleSelection;
-      this.pairService.addNewPair(selectedOffer, selectedOffer.specialOption2, '2', toggleSelection, true);
+      selectedOffer.specialOddsFor2Selected = toggleSelection;
+      this.ticketService.addGame(selectedOffer, selectedOffer.specialOddsFor2, '2', toggleSelection, true);
     }
   }
 
-  selectSpecialOfferX1(selectedOffer: Offer): void {
-    if (selectedOffer.optionX1 !== '-') {
-      const toggleSelection = !selectedOffer.specialOptionX1Selected;
+  selectSpecialOfferX1(selectedOffer: IOfferView): void {
+    if (selectedOffer.oddsForX1 !== '-') {
+      const toggleSelection = !selectedOffer.specialOddsForX1Selected;
       this.deselectBettingOffer(selectedOffer);
-      selectedOffer.specialOptionX1Selected = toggleSelection;
-      this.pairService.addNewPair(selectedOffer, selectedOffer.specialOptionX1, 'X1', toggleSelection, true);
+      selectedOffer.specialOddsForX1Selected = toggleSelection;
+      this.ticketService.addGame(selectedOffer, selectedOffer.specialOddsForX1, 'X1', toggleSelection, true);
     }
   }
 
-  selectSpecialOfferX2(selectedOffer: Offer): void {
-    if (selectedOffer.specialOptionX2 !== '-') {
-      const toggleSelection = !selectedOffer.specialOptionX2Selected;
+  selectSpecialOfferX2(selectedOffer: IOfferView): void {
+    if (selectedOffer.specialOddsForX2 !== '-') {
+      const toggleSelection = !selectedOffer.specialOddsForX2Selected;
       this.deselectBettingOffer(selectedOffer);
-      selectedOffer.specialOptionX2Selected = toggleSelection;
-      this.pairService.addNewPair(selectedOffer, selectedOffer.specialOptionX2, 'X2', toggleSelection, true);
+      selectedOffer.specialOddsForX2Selected = toggleSelection;
+      this.ticketService.addGame(selectedOffer, selectedOffer.specialOddsForX2, 'X2', toggleSelection, true);
     }
   }
 
-  selectSpecialOffer12(selectedOffer: Offer): void {
-    if (selectedOffer.specialOption12 !== '-') {
-      const toggleSelection = !selectedOffer.specialOption12Selected;
+  selectSpecialOffer12(selectedOffer: IOfferView): void {
+    if (selectedOffer.specialOddsFor12 !== '-') {
+      const toggleSelection = !selectedOffer.specialOddsFor12Selected;
       this.deselectBettingOffer(selectedOffer);
-      selectedOffer.specialOption12Selected = toggleSelection;
-      this.pairService.addNewPair(selectedOffer, selectedOffer.specialOption12, '12', toggleSelection, true);
+      selectedOffer.specialOddsFor12Selected = toggleSelection;
+      this.ticketService.addGame(selectedOffer, selectedOffer.specialOddsFor12, '12', toggleSelection, true);
     }
   }
 
-  deselectBettingOffer(offer: Offer) {
-    offer.option1Selected = false;
-    offer.optionXSelected = false;
-    offer.option2Selected = false;
-    offer.optionX1Selected = false;
-    offer.optionX2Selected = false;
-    offer.option12Selected = false;
+  deselectBettingOffer(offer: IOfferView) {
+    offer.oddsFor1Selected = false;
+    offer.oddsForXSelected = false;
+    offer.oddsFor2Selected = false;
+    offer.oddsForX1Selected = false;
+    offer.oddsForX2Selected = false;
+    offer.oddsFor12Selected = false;
 
     this.deselectSpecialOffer(offer);
   }
 
-  deselectSpecialOffer(offer: Offer) {
-    offer.specialOption1Selected = false;
-    offer.specialOptionXSelected = false;
-    offer.specialOption2Selected = false;
-    offer.specialOptionX1Selected = false;
-    offer.specialOptionX2Selected = false;
-    offer.specialOption12Selected = false;
+  deselectSpecialOffer(offer: IOfferView) {
+    offer.specialOddsFor1Selected = false;
+    offer.specialOddsForXSelected = false;
+    offer.specialOddsFor2Selected = false;
+    offer.specialOddsForX1Selected = false;
+    offer.specialOddsForX2Selected = false;
+    offer.specialOddsFor12Selected = false;
   }
 
-  revertSelectionOnBettingOffer(selection: string, offer: Offer) {
+  revertSelectionOnBettingOffer(selection: string, offer: IOfferView) {
     if ('X' === selection) {
-      offer.optionXSelected = true;
+      offer.oddsForXSelected = true;
     } else if ('X1' === selection) {
-      offer.optionX1Selected = true;
+      offer.oddsForX1Selected = true;
     } else if ('X2' === selection) {
-      offer.optionX2Selected = true;
+      offer.oddsForX2Selected = true;
     } else if ('1' === selection) {
-      offer.option1Selected = true;
+      offer.oddsFor1Selected = true;
     } else if ('2' === selection) {
-      offer.option2Selected = true;
+      offer.oddsFor2Selected = true;
     } else if ('12' === selection) {
-      offer.option12Selected = true;
+      offer.oddsFor12Selected = true;
     }
   }
 

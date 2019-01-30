@@ -1,7 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
-
-import { Ticket } from '../../models/Ticket';
+import { Component, OnInit } from '@angular/core';
+import { ITicket } from '../../interfaces/ITicket';
 import { TicketService } from '../../services/ticket.service';
 
 @Component({
@@ -9,18 +7,19 @@ import { TicketService } from '../../services/ticket.service';
   templateUrl: './played-tickets.component.html',
   styleUrls: ['./played-tickets.component.scss']
 })
-export class PlayedTicketsComponent implements OnInit, OnDestroy {
-  subscription: Subscription;
-  private tickets: Ticket [];
+export class PlayedTicketsComponent implements OnInit {
+  private tickets: ITicket[];
 
-  constructor( private ticketService: TicketService) {
+  constructor(private ticketService: TicketService) {
+    this.tickets = [];
   }
 
   ngOnInit() {
-    this.tickets = this.ticketService.getTickets();
-  }
-
-  ngOnDestroy() {
+    this.ticketService.tickets$.subscribe(
+      tickets => {
+        this.tickets = tickets;
+      });
+    this.ticketService.getTickets();
   }
 
 }

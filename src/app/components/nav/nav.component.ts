@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
 
 import { WalletService } from '../../services/wallet.service';
+import { IWallet } from '../../interfaces/IWallet';
 
 @Component({
   selector: 'app-nav',
@@ -10,17 +10,18 @@ import { WalletService } from '../../services/wallet.service';
 })
 export class NavComponent implements OnInit {
 
-  subscription: Subscription;
-  wallet: any;
+  walletBalance: number;
 
   constructor(private walletService: WalletService) {
+    this.walletBalance = 0;
   }
+
   ngOnInit() {
     this.walletService.wallet$.subscribe(
       wallet => {
-        this.wallet.walletBalance = wallet.walletBalance;
+        this.walletBalance = wallet.walletBalance;
       });
-      this.walletService.get();
+    this.walletService.get();
   }
 
 

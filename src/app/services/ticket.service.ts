@@ -1,60 +1,72 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Offer } from '../models/Offer';
-import { Pair } from '../models/Pair';
-import { Ticket } from '../models/Ticket';
+import { IOfferView } from '../interfaces/IOffer';
+import { IGame } from '../interfaces/IGame';
+import { ITicket } from '../interfaces/ITicket';
 
-@Injectable({
-  providedIn: 'root'
-})
-
-export class PairService {
-
-  private subjects = new Subject<any>();
-  private pairs: Pair [];
-
-  constructor() {
-    this.pairs = [];
-  }
-
-  addNewPair(selectedPair: Offer, selectedCoefficient: string, selectedType: string, addRemoveFlag: boolean, special: boolean) {
-    const newPair = new Pair();
-    newPair.offerId = selectedPair.id;
-    newPair.pairName = selectedPair.pairName;
-    newPair.selectedOptionName = selectedType;
-    newPair.selectedCoefficient = selectedCoefficient;
-    newPair.special = special;
-
-    this.subjects.next({ newPair: newPair, addRemove: addRemoveFlag });
-    this.pairs.push(newPair);
-  }
-
-  getNewPair(): Observable<any> {
-    return this.subjects.asObservable();
-  }
-
-  getPairs(): Observable<Pair[]> {
-    return of(this.pairs);
-  }
-
-}
+const httpOptions = {
+  headers: new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'POST,GET, OPTIONS,DELETE'
+  })
+};
 
 @Injectable({
   providedIn: 'root'
 })
 export class TicketService {
 
-  tickets: Ticket [];
-  constructor() {
-    this.tickets = [];
+  tickets: ITicket[];
+  game: IGame;
+  private ticketSubject: Subject<ITicket>;
+  public ticket$: Observable<ITicket>;
+  private ticketsSubject: Subject<ITicket[]>;
+  public tickets$: Observable<ITicket[]>;
+  private ticketUrl: string;
+  private gameSubject: Subject<IGame>;
+  public game$: Observable<IGame>;
+
+  constructor(
+    private httpClient: HttpClient) {
+    this.ticketUrl = 'http://localhost:3000/tickets';
+    this.ticketsSubject = new Subject<ITicket[]>();
+    this.tickets$ = this.ticketsSubject.asObservable();
+    this.ticketSubject = new Subject<ITicket>();
+    this.ticket$ = this.ticketSubject.asObservable();
+    this.gameSubject = new Subject<IGame>();
+    this.game$ = this.gameSubject.asObservable();
   }
 
-  playTicket(ticket: Ticket): any {
-      this.tickets.push(ticket);
+
+  playTicket(ticket: ITicket): Observable<any> {
+    return this.httpClient.post(this.ticketUrl, ticket, httpOptions);
   }
 
-  getTickets(): Ticket [] {
-    return this.tickets;
+  addGame(offer: IOfferView, selectedOdds: string, selectedType: string, isAddOrEdit: boolean, special: boolean) {
+    this.game = {
+      offerId: offer.id,
+      oddsType: selectedType,
+      game: offer.game,
+      odds: selectedOdds,
+      isAddOrEdit: isAddOrEdit,
+      special: special,
+      date: null
+    };
+    this.gameSubject.next(this.game);
+  }
+
+  getTickets() {
+    return this.httpClient.get(this.ticketUrl).subscribe(
+      successData => {
+        this.tickets = successData as ITicket[];
+        this.ticketsSubject.next(this.tickets);
+      },
+      errData => {
+        console.log(`Error while getting tickets->${errData}`);
+      }
+    );
   }
 }

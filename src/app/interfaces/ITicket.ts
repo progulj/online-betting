@@ -1,10 +1,10 @@
-import { Pair } from '../models/Pair';
-export class Ticket {
+import { IGame } from './IGame';
+export interface ITicket {
     id: number;
-    totalCoefficient: number;
+    totalOdds: number;
     fullPayment: number;
     commission: number;
     estimatedWin: number;
-    pairs: Pair [];
+    games: IGame[];
     date: number;
 }

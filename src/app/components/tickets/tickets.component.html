@@ -1,11 +1,11 @@
 <div tabindex="-1"  *ngIf="ticket" (mouseout)="resetWarnings()">
-  <div *ngIf="ticket.pairs">
+  <div *ngIf="ticket.games">
 
-    <div class="pair-data" *ngFor="let pair of ticket.pairs">
-      <div class="pair-data-name">{{pair.pairName}}</div>
-      <div class="pair-data-option">{{pair.selectedOptionName}}</div>
-      <div class="pair-data-coefficient">{{pair.selectedCoefficient}}</div>
-      <div class="pair-data-delete" (click)="deleteThisPair(pair)">x</div>
+    <div class="pair-data" *ngFor="let game of ticket.games">
+      <div class="pair-data-name">{{game.game}}</div>
+      <div class="pair-data-option">{{game.oddsType}}</div>
+      <div class="pair-data-coefficient">{{game.odds}}</div>
+      <div class="pair-data-delete" (click)="deleteThisPair(game)">x</div>
     </div>
     <div *ngIf="isSecondSpecial">
       You can select only one TOP OFFER per ticket!
@@ -13,7 +13,7 @@
     <div>{{ticket.totalCoefficient}}</div>
     <input type="textbox" [(ngModel)]="ticket.fullPayment" appTwoDigitDecimalNumber>
     <div>{{ticket.commission | multiplyOnFly: ticket.fullPayment}}</div>
-    <div>{{ticket.commission | estimatedWin: ticket.fullPayment:ticket.totalCoefficient}}</div>
+    <div>{{ticket.commission | estimatedWin: ticket.fullPayment:ticket.totalOdds}}</div>
     <button (click)="playTicket()"> Play</button>
     <div *ngIf="isNothingSelected">Please select at least one pair</div>
     <div *ngIf="isNegativeBalance">Insufficient funds! Please top-up your wallet balance!</div>

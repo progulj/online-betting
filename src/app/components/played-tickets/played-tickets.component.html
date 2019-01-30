@@ -1,12 +1,12 @@
 <div  *ngFor="let ticket of tickets">
-    <div>Total odds:{{ticket.totalCoefficient}}</div>
+    <div>Total odds:{{ticket.toatalOdds}}</div>
     <div>Payment:{{ticket.fullPayment}}</div>
-    <div>Ticket status: {{ticket.status}}</div>
     <div>Amount to gain:{{ticket.estimaredWin}}</div>
     <div>Ticket date:{{ticket.date}}</div>
+    <div>Ticket status: {{ticket.status}}</div>
     <div  *ngFor="let pair of ticket.pairs">
-        <div >Pair: {{pair.pairName}}</div>
-        <div >{{pair.selectedOptionName}}</div>
-        <div >{{pair.totalCoefficient}}</div>
+        <div >Pair: {{pair.game}}</div>
+        <div >{{pair.oddsType}}</div>
+        <div >{{pair.odds}}</div>
     </div>
   </div>

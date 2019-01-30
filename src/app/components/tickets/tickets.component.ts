@@ -1,10 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 
-import { Ticket } from '../../models/Ticket';
-import { Pair } from '../../models/Pair';
+import { ITicket } from '../../interfaces/ITicket';
+import { IGame } from '../../interfaces/IGame';
+import { IWallet } from '../../interfaces/IWallet';
 import { OfferService } from '../../services/offer.service';
-import { TicketService, PairService } from '../../services/ticket.service';
+import { TicketService } from '../../services/ticket.service';
 import { WalletService } from '../../services/wallet.service';
 
 @Component({
@@ -12,100 +12,117 @@ import { WalletService } from '../../services/wallet.service';
   templateUrl: './tickets.component.html',
   styleUrls: ['./tickets.component.scss']
 })
-export class TicketsComponent implements OnInit, OnDestroy {
-  private ticket: Ticket;
-  subscription: Subscription;
-  private pair: Pair;
+export class TicketsComponent implements OnInit {
+  private ticket: ITicket;
+  private game: IGame;
+  private wallet: IWallet;
   private isSecondSpecial: boolean;
   private isNothingSelected: boolean;
   private isNegativeBalance: boolean;
   private isSpecialConditionNotMet: boolean;
-  private wallet: any;
 
-  constructor(private offerService: OfferService, private ticketService: TicketService,
-    private pairService: PairService, private walletService: WalletService) {
-    this.subscription = this.pairService.getNewPair().subscribe(data => this.addPairs(data.newPair, data.addRemove));
+
+  constructor(private offerService: OfferService, private ticketService: TicketService, private walletService: WalletService) {
+
   }
 
   ngOnInit() {
-    this.ticket = new Ticket();
-    this.ticket.totalCoefficient = 0.00;
-    this.ticket.id = 1;
-    this.ticket.fullPayment = 10.00;
-    this.ticket.commission = 0.05;
-    this.ticket.estimatedWin = 0;
-    this.ticket.pairs = [];
+    this.ticket = {
+      totalOdds: 0.00,
+      id: 1,
+      fullPayment: 10.00,
+      commission: 0.05,
+      estimatedWin: 0,
+      games: [],
+      date: null
+    };
+    this.wallet = {
+      id: null,
+      walletBalance: 0,
+    };
     this.isSecondSpecial = false;
     this.isNothingSelected = false;
     this.isNegativeBalance = false;
     this.isSpecialConditionNotMet = false;
 
+    this.ticketService.game$.subscribe(
+      game => {
+        this.addGame(game);
+      });
+
     this.walletService.wallet$.subscribe(
       wallet => {
         this.wallet = wallet;
       });
+    this.walletService.get();
   }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
-
-  getPairs(): void {
-    this.pairService.getPairs()
-      .subscribe(pairs => this.ticket.pairs = pairs);
-  }
 
   playTicket(): void {
-    if (this.ticket.pairs.length === 0) {
+    if (this.ticket.games.length === 0) {
       this.isNothingSelected = true;
     } else {
-      const special = this.ticket.pairs.filter(offer => offer.special === true);
+      const special = this.ticket.games.filter(offer => offer.special === true);
       if (special && special.length > 0) {
         let limit = 0;
-        this.ticket.pairs.forEach( pair => {
-            if (!pair.special) {
-              if (+pair.selectedCoefficient >= 1.1) {
-                limit++;
-              }
-           }
-           if (limit > 5) {
+        this.ticket.games.forEach(game => {
+          if (!game.special) {
+            if (+game.odds >= 1.1) {
+              limit++;
+            }
+          }
+          if (limit > 5) {
             if (this.ticket.fullPayment > this.wallet.walletBalance) {
               this.isNegativeBalance = true;
             } else {
-               this.ticketService.playTicket(this.ticket);
+              this.ticketService.playTicket(this.ticket).subscribe(successData => {
+                this.walletService.get();
+              }, errData => {
+                console.log(`Error while adding new ticket->${errData}`);
+              }
+              );
             }
-           } else {
+          } else {
             this.isSpecialConditionNotMet = true;
-           }
           }
+        }
         );
 
       } else {
         if (this.ticket.fullPayment > this.wallet.walletBalance) {
           this.isNegativeBalance = true;
         } else {
-           this.ticketService.playTicket(this.ticket);
+          this.ticketService.playTicket(this.ticket).subscribe(successData => {
+            this.walletService.wallet$.subscribe(
+              wallet => {
+                this.wallet = wallet;
+              });
+            this.walletService.get();
+          }, errData => {
+            console.log(`Error while adding new ticket->${errData}`);
+          }
+          );
         }
       }
     }
   }
 
 
-  addPairs(newPair: Pair, addRemoveFlag: boolean) {
+  addGame(newGame: IGame) {
     this.isSecondSpecial = false;
-    if (this.ticket.pairs) {
-      this.pair = this.ticket.pairs.find(pair => pair.offerId === newPair.offerId);
-      if (this.pair) {
-        if (addRemoveFlag) {
-          const specialOffers = this.ticket.pairs.filter(offer => offer.special === true);
-          if (specialOffers.length > 0 && newPair.special && newPair.offerId !== specialOffers[0].offerId) {
+    if (this.ticket.games) {
+      this.game = this.ticket.games.find(game => game.offerId === newGame.offerId);
+      if (this.game) {
+        if (newGame.isAddOrEdit) {
+          const specialGames = this.ticket.games.filter(game => game.special === true);
+          if (specialGames.length > 0 && newGame.special && newGame.offerId !== specialGames[0].offerId) {
             this.isSecondSpecial = true;
-            this.offerService.deselectOffer(newPair.offerId, true, this.pair.selectedOptionName);
+            this.offerService.deselectOffer(newGame.offerId, true, this.game.oddsType);
           } else {
-            this.ticket.pairs = this.ticket.pairs.filter(offer => offer.offerId !== this.pair.offerId);
-            newPair.date = this.pair.date;
-            this.ticket.pairs.push(newPair);
-            this.ticket.pairs.sort((n1, n2) => {
+            this.ticket.games = this.ticket.games.filter(game => game.offerId !== this.game.offerId);
+            newGame.date = this.game.date;
+            this.ticket.games.push(newGame);
+            this.ticket.games.sort((n1, n2) => {
               if (n1.date > n2.date) {
                 return 1;
               }
@@ -114,57 +131,55 @@ export class TicketsComponent implements OnInit, OnDestroy {
               }
               return 0;
             });
-            this.ticket.totalCoefficient  = 0.0;
-            this.ticket.pairs.forEach( pair => {
-              this.ticket.totalCoefficient += +pair.selectedCoefficient;
-              }
+            this.ticket.totalOdds = 0.0;
+            this.ticket.games.forEach(game => {
+              this.ticket.totalOdds += +game.odds;
+            }
             );
-            this.ticket.totalCoefficient  = Math.round(this.ticket.totalCoefficient * 100) / 100;
+            this.ticket.totalOdds = Math.round(this.ticket.totalOdds * 100) / 100;
           }
         } else {
-          this.ticket.pairs = this.ticket.pairs.filter(offer => offer.offerId !== this.pair.offerId);
-          this.ticket.totalCoefficient  = 0.0;
-          this.ticket.pairs.forEach( pair => {
-            this.ticket.totalCoefficient += +pair.selectedCoefficient;
-            }
+          this.ticket.games = this.ticket.games.filter(game => game.offerId !== this.game.offerId);
+          this.ticket.totalOdds = 0.0;
+          this.ticket.games.forEach(game => {
+            this.ticket.totalOdds += +game.odds;
+          }
           );
-          this.ticket.totalCoefficient  = Math.round(this.ticket.totalCoefficient * 100) / 100;
+          this.ticket.totalOdds = Math.round(this.ticket.totalOdds * 100) / 100;
         }
       } else {
-        const specialOffers = this.ticket.pairs.filter(offer => offer.special === true);
-        if (specialOffers.length > 0 && newPair.special) {
+        const specialOffers = this.ticket.games.filter(offer => offer.special === true);
+        if (specialOffers.length > 0 && newGame.special) {
           this.isSecondSpecial = true;
-          this.offerService.deselectOffer(newPair.offerId, true, '-');
+          this.offerService.deselectOffer(newGame.offerId, true, '-');
         } else {
-          newPair.date = Date.now();
-          this.ticket.pairs.push(newPair);
-          this.ticket.totalCoefficient  = 0.0;
-          this.ticket.pairs.forEach( pair => {
-            this.ticket.totalCoefficient += +pair.selectedCoefficient;
-            }
+          newGame.date = Date.now();
+          this.ticket.games.push(newGame);
+          this.ticket.totalOdds = 0.0;
+          this.ticket.games.forEach(game => {
+            this.ticket.totalOdds += +game.odds;
+          }
           );
-          this.ticket.totalCoefficient  = Math.round(this.ticket.totalCoefficient * 100) / 100;
+          this.ticket.totalOdds = Math.round(this.ticket.totalOdds * 100) / 100;
         }
       }
     }
   }
-  deleteThisPair(pairToDelete: Pair) {
-    this.removePair(pairToDelete);
-    this.offerService.deselectOffer(pairToDelete.offerId, false, '-');
-    this.isSecondSpecial = false;
-    this.isNothingSelected = false;
-    this.isNegativeBalance = false;
-    this.isSpecialConditionNotMet = false;
+
+  deleteThisPair(gameToDelete: IGame) {
+    this.removePair(gameToDelete);
+    this.offerService.deselectOffer(gameToDelete.offerId, false, '-');
+    this.resetWarnings();
   }
 
-  removePair = (pairToDelete: Pair): void => {
-    this.ticket.pairs = this.ticket.pairs.filter(pair => pair.offerId !== pairToDelete.offerId);
-    this.ticket.totalCoefficient  = 0;
-            this.ticket.pairs.forEach( pair => {
-              this.ticket.totalCoefficient += +pair.selectedCoefficient;
-      }
+  removePair = (gameToDelete: IGame): void => {
+    this.ticket.games = this.ticket.games.filter(pair => pair.offerId !== gameToDelete.offerId);
+    this.ticket.totalOdds = 0;
+    this.ticket.games.forEach(pair => {
+      this.ticket.totalOdds += +pair.odds;
+    }
     );
-    this.ticket.totalCoefficient  = Math.round(this.ticket.totalCoefficient * 100) / 100;
+    this.ticket.totalOdds = Math.round(this.ticket.totalOdds * 100) / 100;
   }
 
   resetWarnings(): void {
