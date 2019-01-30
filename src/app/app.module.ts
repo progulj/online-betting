@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -13,6 +14,7 @@ import { TwoDigitDecimalNumberDirective } from './directives/two-digit-decimal-n
 import { MultiplyPipe } from './pipes/multiplyOnFly';
 import { EstimatedWinPipe } from './pipes/estimatedWin';
 import { PlayedTicketsComponent } from './components/played-tickets/played-tickets.component';
+import { MaterialModule } from './material.module';
 
 
 @NgModule({
@@ -31,7 +33,9 @@ import { PlayedTicketsComponent } from './components/played-tickets/played-ticke
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    MaterialModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,12 +1,31 @@
-<div  *ngFor="let ticket of tickets">
-    <div>Total odds:{{ticket.toatalOdds}}</div>
-    <div>Payment:{{ticket.fullPayment}}</div>
-    <div>Amount to gain:{{ticket.estimaredWin}}</div>
-    <div>Ticket date:{{ticket.date}}</div>
-    <div>Ticket status: {{ticket.status}}</div>
-    <div  *ngFor="let pair of ticket.pairs">
-        <div >Pair: {{pair.game}}</div>
-        <div >{{pair.oddsType}}</div>
-        <div >{{pair.odds}}</div>
-    </div>
-  </div>
+<mat-card>
+        <mat-card-header>
+                <mat-card-title><p>PREVIEW TICKETS</p></mat-card-title>
+                
+        </mat-card-header>
+        <div>
+            <mat-divider [inset]="true"></mat-divider>
+        </div>
+        <div *ngFor="let ticket of tickets">
+        <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    This is the expansion title
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    This is a summary of the content
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <div>Total odds:{{ticket.toatalOdds}}</div>
+                <div>Payment:{{ticket.fullPayment}}</div>
+                <div>Amount to gain:{{ticket.estimatedWin}}</div>
+                <div>Ticket date:{{ticket.date}}</div>
+                <div>Ticket status: {{ticket.status}}</div>
+                <div *ngFor="let game of ticket.games">
+                        <div>Game: {{game.game}}</div>
+                        <div>{{game.oddsType}}</div>
+                        <div>{{game.odds}}</div>
+                </div>
+              </mat-expansion-panel>
+            </div>
+</mat-card>

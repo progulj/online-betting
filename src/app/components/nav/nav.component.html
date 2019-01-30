@@ -1,16 +1,16 @@
-<header>
-    <div class="logo">
-        <a>
-          <img src="assets/img/logo.png">
-        </a>
-    </div>
-  <div class="container">
-    <nav>
-      <ul>
-        <li><a routerLink="/">BETTING OFFER</a></li>
-        <li><a routerLink="/playedTickets">PREVIEW TICKETS</a></li>
-        <li><a routerLink="/wallet">WALLET BALANCE: {{ walletBalance }} </a></li>
-      </ul>
-    </nav>
-  </div>
-</header>
+<mat-toolbar color="primary">
+        <span><mat-icon>mood</mat-icon>Online Betting</span>
+
+        <span>Wallet Balance: {{ walletBalance }} $</span>
+    
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+</mat-toolbar>
+
+<mat-menu x-position="before" #menu="matMenu">
+        <button mat-menu-item routerLink="/">Home</button>
+        <button mat-menu-item routerLink="/playedTickets">Preview Tickets</button>
+        <button mat-menu-item routerLink="/wallet">Wallet </button>
+ </mat-menu> 
+
