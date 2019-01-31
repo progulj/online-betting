@@ -27,24 +27,7 @@ export class TicketsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.ticket = {
-      totalOdds: 0.00,
-      id: 1,
-      fullPayment: 10.00,
-      commission: 0.05,
-      estimatedWin: 0,
-      games: [],
-      date: null
-    };
-    this.wallet = {
-      id: null,
-      walletBalance: 0,
-    };
-    this.isSecondSpecial = false;
-    this.isNothingSelected = false;
-    this.isNegativeBalance = false;
-    this.isSpecialConditionNotMet = false;
-
+    this.setTicketToDefaultState();
     this.ticketService.game$.subscribe(
       game => {
         this.addGame(game);
@@ -59,6 +42,7 @@ export class TicketsComponent implements OnInit {
 
 
   playTicket(): void {
+    this.resetWarnings();
     if (this.ticket.games.length === 0) {
       this.isNothingSelected = true;
     } else {
@@ -77,6 +61,10 @@ export class TicketsComponent implements OnInit {
             } else {
               this.ticketService.playTicket(this.ticket).subscribe(successData => {
                 this.walletService.get();
+                this.ticket.games.forEach(gameToDeselect => {
+                  this.offerService.deselectOffer(gameToDeselect.offerId,  gameToDeselect.special, gameToDeselect.oddsType);
+                });
+                this.setTicketToDefaultState();
               }, errData => {
                 console.log(`Error while adding new ticket->${errData}`);
               }
@@ -98,6 +86,10 @@ export class TicketsComponent implements OnInit {
                 this.wallet = wallet;
               });
             this.walletService.get();
+            this.ticket.games.forEach(gameToDeselect => {
+              this.offerService.deselectOffer(gameToDeselect.offerId,  gameToDeselect.special, gameToDeselect.oddsType);
+            });
+            this.setTicketToDefaultState();
           }, errData => {
             console.log(`Error while adding new ticket->${errData}`);
           }
@@ -107,9 +99,28 @@ export class TicketsComponent implements OnInit {
     }
   }
 
+  setTicketToDefaultState() {
+    this.ticket = {
+      totalOdds: 0.00,
+      id: 1,
+      fullPayment: 10.00,
+      commission: 0.05,
+      estimatedWin: 0,
+      games: [],
+      date: null
+    };
+    this.wallet = {
+      id: null,
+      walletBalance: 0,
+    };
+    this.isSecondSpecial = false;
+    this.isNothingSelected = false;
+    this.isNegativeBalance = false;
+    this.isSpecialConditionNotMet = false;
+  }
 
   addGame(newGame: IGame) {
-    this.isSecondSpecial = false;
+    this.resetWarnings();
     if (this.ticket.games) {
       this.game = this.ticket.games.find(game => game.offerId === newGame.offerId);
       if (this.game) {

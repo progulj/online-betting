@@ -1,24 +1,42 @@
-<div tabindex="-1"  *ngIf="ticket" (mouseout)="resetWarnings()">
-  <div *ngIf="ticket.games">
-
-    <div class="pair-data" *ngFor="let game of ticket.games">
-      <div class="pair-data-name">{{game.game}}</div>
-      <div class="pair-data-option">{{game.oddsType}}</div>
-      <div class="pair-data-coefficient">{{game.odds}}</div>
-      <div class="pair-data-delete" (click)="deleteThisPair(game)">x</div>
+<mat-card >
+  <mat-card-header>
+    <mat-card-title>
+      <p>Ticket</p>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div>
+      <mat-divider [inset]="true"></mat-divider>
     </div>
-    <div *ngIf="isSecondSpecial">
-      You can select only one TOP OFFER per ticket!
+    <div tabindex="-1" *ngIf="ticket">
+      <div *ngIf="ticket.games">
+       <mat-list>
+        <mat-list-item *ngFor="let game of ticket.games">
+          <div class="pair-data-name">{{game.game}}</div>
+          <div class="pair-data-option">{{game.oddsType}}</div>
+          <div class="pair-data-coefficient">{{game.odds}}</div>
+          <div class="pair-data-delete" (click)="deleteThisPair(game)"><mat-icon>clear</mat-icon></div>
+          <mat-divider></mat-divider>
+        </mat-list-item>
+        <div class="warn" *ngIf="isSecondSpecial">
+            You can select only one Top offer per ticket!
+        </div>
+        </mat-list>
+        
+        <mat-form-field>
+          <input matInput autocomplete="off" placeholder="Place Bet" [(ngModel)]="ticket.fullPayment"
+            appTwoDigitDecimalNumber (focusin)="resetWarnings()">
+          <div class="warn" *ngIf="isNothingSelected"><p mat-caption>Please select at least one pair!</p></div>
+          <div class="warn" *ngIf="isNegativeBalance">Insufficient funds! Please add funds to your wallet balance!</div>
+          <div class="warn" *ngIf="isSpecialConditionNotMet">Need five regular offers with odds 1.1 or more!</div>
+        </mat-form-field>
+        <div class="result">
+          <div> Total odds: {{ticket.totalOdds}}</div>
+          <div> Commission: {{ticket.commission | multiplyOnFly: ticket.fullPayment}}$</div>
+          <div> Possible winnings: {{ticket.commission | estimatedWin: ticket.fullPayment:ticket.totalOdds}}$</div>
+        </div>
+        <button mat-raised-button color="primary" (click)="playTicket()"> Play </button>
+      </div>
     </div>
-    <div>{{ticket.totalCoefficient}}</div>
-    <input type="textbox" [(ngModel)]="ticket.fullPayment" appTwoDigitDecimalNumber>
-    <div>{{ticket.commission | multiplyOnFly: ticket.fullPayment}}</div>
-    <div>{{ticket.commission | estimatedWin: ticket.fullPayment:ticket.totalOdds}}</div>
-    <button (click)="playTicket()"> Play</button>
-    <div *ngIf="isNothingSelected">Please select at least one pair</div>
-    <div *ngIf="isNegativeBalance">Insufficient funds! Please top-up your wallet balance!</div>
-    <div *ngIf="isSpecialConditionNotMet">Need five regular offers with coefficient 1.10 or more!</div>
-    
-  </div>
-
-</div>
+  </mat-card-content>
+</mat-card>

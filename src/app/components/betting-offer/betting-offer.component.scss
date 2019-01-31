@@ -1,16 +1,18 @@
 
 
 .mat-card {
-    width: 90%;
+    width: 100%;
     margin: 1em auto;
     
 }
 .mat-list{
-    width: 90%;
+    width: 100%;
     min-width: 500px;
+    font-size: 12px;
+    
+    
     .mat-list-item{
         width: 100%;
-
         .name{
             width: 40%
         }
