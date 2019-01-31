@@ -4,16 +4,19 @@
             <mat-card-title><p>WALLET</p></mat-card-title>
             
     </mat-card-header>
-    <div>
-         <mat-divider [inset]="true"></mat-divider>
-     </div>
-    <div>
-        <p>Current Balance: {{ walletBalance }}$</p>
-    </div>
-    <mat-form-field>
-        <textarea matInput placeholder="Add Funds" [(ngModel)]="amount" appTwoDigitDecimalNumber></textarea>
-    </mat-form-field>
-    <div>
-        <button mat-raised-button color="primary" (click)="addFunds()"> Add </button>
-    </div>
+    <mat-card-content>    
+        <div>
+            <mat-divider [inset]="true"></mat-divider>
+        </div>
+       <div>
+           <p>Current Balance: {{ walletBalance }}$</p>
+       </div>
+       <mat-form-field>
+            <input matInput autocomplete="off" placeholder="Add Funds" [(ngModel)]="amount" appTwoDigitDecimalNumber>
+       </mat-form-field>
+       <div>
+           <button mat-raised-button color="primary" (click)="addFunds()"> Add </button>
+       </div>
+    </mat-card-content>
+
 </mat-card>

@@ -1,0 +1,30 @@
+.mat-card {
+    max-width: 80%;
+    margin: 2em auto;
+    text-align: left;
+
+    .mat-icon{
+        padding-right:5em;
+    }
+    .mat-divider{
+        margin-bottom: 1em;
+    }
+    .fail{
+        color: rgb(255, 0, 0);
+    }
+    .success{
+        color:rgb(0, 255, 0);
+    }
+    .game{
+        width: 33%;
+        margin-left: 2em;
+    }
+    .game-title{
+        width: 33%;
+        font-weight: bold;
+    }
+    .ticket{
+        width: 33%;
+        font-weight: bold;
+    }
+  }
