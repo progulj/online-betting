@@ -22,7 +22,7 @@ export class WalletService {
 
   constructor(
     private httpClient: HttpClient) {
-    this.walletUrl = 'http://localhost:3000/api/wallet';
+    this.walletUrl = 'http://localhost:3000/wallet';
     this.walletSubject = new Subject<IWallet>();
     this.wallet$ = this.walletSubject.asObservable();
   }

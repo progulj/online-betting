@@ -10,6 +10,8 @@ import { TicketService } from '../../services/ticket.service';
 })
 export class BettingOfferComponent implements OnInit {
   offers: IOfferView[];
+  colums: number;
+  offersColspan: number;
   constructor(private offerService: OfferService, private ticketService: TicketService) {
   }
 
@@ -20,6 +22,14 @@ export class BettingOfferComponent implements OnInit {
       offer => {
         this.removeOfferSelection(offer.id, offer.deselectSpecial, offer.selectionToRevert);
       });
+      this.colums = (window.innerWidth <= 700) ? 1 : 3;
+      this.offersColspan = (window.innerWidth <= 700) ? 1 : 2;
+  }
+
+
+  onResize(event) {
+    this.colums = (event.target.innerWidth <= 700) ? 1 : 3;
+    this.offersColspan = (window.innerWidth <= 700) ? 1 : 2;
   }
 
 

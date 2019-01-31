@@ -1,117 +1,28 @@
-.left-half {
-    background-color: #f8f8f8;
-    position: absolute;
-    left: 0px;
-    width: 75%;
 
-    .offer-bar{
-        background: #1f427a;
-        .offer-header-name{
-            background: #1f427a;
-            height: 30px;
-            width: 400px;
-            float: left;
-            color: beige;
-            text-align: center;
-            margin: 2px 0px 2px 0px
-        }
-        
-        .offer-option-header{
-            background: #1f427a;
-            height: 30px;
-            width: 80px;
-            float: left;
-            color: beige;
-            text-align: center;
-            margin: 2px 0px 2px 0px
-        }
-    }
-    .offer-data{
-        box-sizing: border-box;
-        float: left;
-        width: 880px;
-        background:  rgb(185, 193, 199);
-        .offer-option-name{
-            height: 30px;
-            width: 400px;
-            color: beige;
-            float: left;
-            text-align: center;
-        }
-        .offer-option-value{
-                background:  rgb(165, 179, 223);
-                height: 30px;
-                width: 80px;
-                float: left;
-                text-align: center;
-        }
-        .offer-option-selected{
-            background:  #1f427a;
-            color: beige;
-            height: 30px;
-            width: 80px;
-            float: left;
-            text-align: center;
-        }
-    }
 
-    .special-offer-bar{
-        padding-top: 4px;
-        background: #efefef;
-        float: left;
-        .special-offer-header-name{
-            background: #4f0c7c;
-            height: 30px;
-            width: 400px;
-            float: left;
-            color: beige;
-            text-align: center;
-            margin: 2px 0px 2px 0px
+.mat-card {
+    width: 90%;
+    margin: 1em auto;
+    
+}
+.mat-list{
+    width: 90%;
+    min-width: 500px;
+    .mat-list-item{
+        width: 100%;
+
+        .name{
+            width: 40%
         }
-        
-        .special-offer-option-header{
-            background: #4f0c7c;
-            height: 30px;
-            width: 80px;
-            float: left;
+        .primary{
+            background-color: #3f51b5;
             color: beige;
-            text-align: center;
-            margin: 2px 0px 2px 0px
+        }
+        .accent{
+            background-color: #ff4081;
+            color: beige;
         }
     }
-    .special-offer-data{
-        box-sizing: border-box;
-        float: left;
-        width: 880px;
-        background:  rgb(210, 159, 240);
-        .special-offer-option-name{
-            height: 30px;
-            width: 400px;
-            color: beige;
-            float: left;
-            text-align: center;
-        }
-        .special-offer-option-value{ 
-                background:  rgb(204, 98, 236);
-                height: 30px;
-                width: 80px;
-                float: left;
-                text-align: center;
-        }
-        .special-offer-option-selected{
-            background:  #4f0c7c;
-            color: beige;
-            height: 30px;
-            width: 80px;
-            float: left;
-            text-align: center;
-        }
-    }
+    
 }
-  
-.right-half {
-  background-color: #c2beb9;
-  position: absolute;
-  right: 0px;
-  width: 25%;
-}
+
