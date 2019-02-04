@@ -1,7 +1,7 @@
 export interface IGame {
-    date: number;
-    offerId: number;
-    game: string;
+    date: Date;
+    idOffer: number;
+    name: string;
     oddsType: string;
     odds: string;
     isAddOrEdit: boolean;

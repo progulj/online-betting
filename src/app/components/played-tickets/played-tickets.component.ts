@@ -9,9 +9,11 @@ import { TicketService } from '../../services/ticket.service';
 })
 export class PlayedTicketsComponent implements OnInit {
   private tickets: ITicket[];
+  private types: Object;
 
   constructor(private ticketService: TicketService) {
     this.tickets = [];
+    this.types = {1: '1', 2: 'X', 3 : '2', 4 : 'X1', 5 : 'X2', 6 : '12'};
   }
 
   ngOnInit() {

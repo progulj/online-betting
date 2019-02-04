@@ -1,4 +1,4 @@
-<mat-card >
+<mat-card>
   <mat-card-header>
     <mat-card-title>
       <p>Ticket</p>
@@ -10,25 +10,31 @@
     </div>
     <div tabindex="-1" *ngIf="ticket">
       <div *ngIf="ticket.games">
-       <mat-list>
-        <mat-list-item *ngFor="let game of ticket.games">
-          <div class="pair-data-name">{{game.game}}</div>
-          <div class="pair-data-option">{{game.oddsType}}</div>
-          <div class="pair-data-coefficient">{{game.odds}}</div>
-          <div class="pair-data-delete" (click)="deleteThisPair(game)"><mat-icon>clear</mat-icon></div>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-        <div class="warn" *ngIf="isSecondSpecial">
+        <mat-list>
+          <mat-list-item *ngFor="let game of ticket.games">
+            <div class="pair-data-name">{{game.name}}</div>
+            <div class="pair-data-option">{{ types[game.oddsType]}}</div>
+            <div class="pair-data-coefficient">{{game.odds}}</div>
+            <div class="pair-data-delete" (click)="deleteThisPair(game)">
+              <mat-icon>clear</mat-icon>
+            </div>
+            <mat-divider></mat-divider>
+          </mat-list-item>
+          <div class="warn" *ngIf="isSecondSpecial">
             You can select only one Top offer per ticket!
-        </div>
+          </div>
         </mat-list>
-        
+
         <mat-form-field>
           <input matInput autocomplete="off" placeholder="Place Bet" [(ngModel)]="ticket.fullPayment"
             appTwoDigitDecimalNumber (focusin)="resetWarnings()">
-          <div class="warn" *ngIf="isNothingSelected"><p mat-caption>Please select at least one pair!</p></div>
+          <div class="warn" *ngIf="isNothingSelected">
+            <p mat-caption>Please select at least one pair!</p>
+          </div>
           <div class="warn" *ngIf="isNegativeBalance">Insufficient funds! Please add funds to your wallet balance!</div>
           <div class="warn" *ngIf="isSpecialConditionNotMet">Need five regular offers with odds 1.1 or more!</div>
+          <div class="warn" *ngIf="isMinimumWager">Minimum wager is 10$!</div>
+          <div class="warn" *ngIf="isMaximumWager">Minimum wager is 100$!</div>
         </mat-form-field>
         <div class="result">
           <div> Total odds: {{ticket.totalOdds}}</div>

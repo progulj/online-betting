@@ -32,7 +32,7 @@ export class TicketService {
 
   constructor(
     private httpClient: HttpClient) {
-    this.ticketUrl = 'http://localhost:3000/tickets';
+    this.ticketUrl = 'http://localhost:27255/tickets';
     this.ticketsSubject = new Subject<ITicket[]>();
     this.tickets$ = this.ticketsSubject.asObservable();
     this.ticketSubject = new Subject<ITicket>();
@@ -48,9 +48,9 @@ export class TicketService {
 
   addGame(offer: IOfferView, selectedOdds: string, selectedType: string, isAddOrEdit: boolean, special: boolean) {
     this.game = {
-      offerId: offer.id,
+      idOffer: offer.id,
       oddsType: selectedType,
-      game: offer.game,
+      name: offer.game,
       odds: selectedOdds,
       isAddOrEdit: isAddOrEdit,
       special: special,

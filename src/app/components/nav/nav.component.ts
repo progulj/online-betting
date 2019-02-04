@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
 import { WalletService } from '../../services/wallet.service';
-import { IWallet } from '../../interfaces/IWallet';
 
 @Component({
   selector: 'app-nav',
@@ -21,7 +20,6 @@ export class NavComponent implements OnInit {
       wallet => {
         this.walletBalance = wallet.walletBalance;
       });
-    this.walletService.get();
   }
 
 

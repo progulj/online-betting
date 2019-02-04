@@ -1,101 +1,101 @@
 <mat-card>
-<mat-grid-list [cols]="colums"  (window:resize)="onResize($event)">
-<mat-grid-tile [colspan]="offersColspan">
-<mat-list >
-  <mat-list-item>
-        <button  mat-button color="primary" class="name">Games</button>
-        <button  mat-button color="primary">1</button>
-        <button  mat-button color="primary">X</button>
-        <button  mat-button color="primary">2</button>
-        <button  mat-button color="primary">X1</button>
-        <button  mat-button color="primary">X2</button>
-        <button  mat-button color="primary">12</button>
-  </mat-list-item>
-  <mat-list-item *ngFor="let offer of offers">
-    <button  mat-button class="name">{{offer.game}}</button>
-    <button  mat-raised-button [ngClass]="{
+  <mat-grid-list [cols]="colums" (window:resize)="onResize($event)">
+    <mat-grid-tile [colspan]="offersColspan">
+      <mat-list>
+        <mat-list-item>
+          <button mat-button color="primary" class="name">Regular games</button>
+          <button mat-button color="primary">1</button>
+          <button mat-button color="primary">X</button>
+          <button mat-button color="primary">2</button>
+          <button mat-button color="primary">X1</button>
+          <button mat-button color="primary">X2</button>
+          <button mat-button color="primary">12</button>
+        </mat-list-item>
+        <mat-list-item *ngFor="let offer of offers">
+          <button mat-button class="name">{{offer.game}}</button>
+          <button mat-raised-button [ngClass]="{
     'none': !offer.oddsFor1Selected,
     'primary': offer.oddsFor1Selected
   }"
-      (click)="selectBettingOffer1(offer)">{{offer.oddsFor1}}</button>
-    <button mat-raised-button [ngClass]="{
+            (click)="selectBettingOffer1(offer)">{{offer.oddsFor1}}</button>
+          <button mat-raised-button [ngClass]="{
     'none': !offer.oddsForXSelected,
     'primary': offer.oddsForXSelected
   }"
-      (click)="selectBettingOfferX(offer)">{{offer.oddsForX}}</button>
-    <button mat-raised-button [ngClass]="{
+            (click)="selectBettingOfferX(offer)">{{offer.oddsForX}}</button>
+          <button mat-raised-button [ngClass]="{
     'none': !offer.oddsFor2Selected,
     'primary': offer.oddsFor2Selected
   }"
-      (click)="selectBettingOffer2(offer)">{{offer.oddsFor2}}</button>
-    <button mat-raised-button [ngClass]="{
+            (click)="selectBettingOffer2(offer)">{{offer.oddsFor2}}</button>
+          <button mat-raised-button [ngClass]="{
     'none': !offer.oddsForX1Selected,
     'primary': offer.oddsForX1Selected
   }"
-      (click)="selectBettingOfferX1(offer)">{{offer.oddsForX1}}</button>
-    <button mat-raised-button [ngClass]="{
+            (click)="selectBettingOfferX1(offer)">{{offer.oddsForX1}}</button>
+          <button mat-raised-button [ngClass]="{
     'none': !offer.oddsForX2tSelected,
     'primary': offer.oddsForX2Selected
   }"
-      (click)="selectBettingOfferX2(offer)">{{offer.oddsForX2}}</button>
-    <button mat-raised-button [ngClass]="{
+            (click)="selectBettingOfferX2(offer)">{{offer.oddsForX2}}</button>
+          <button mat-raised-button [ngClass]="{
         'none': !offer.oddsFor12tSelected,
         'primary': offer.oddsFor12Selected
       }"
-      (click)="selectBettingOffer12(offer)">{{offer.oddsFor12}}</button>
-      <mat-divider></mat-divider>
-    </mat-list-item>
-    <mat-list-item>
-        <button mat-button color="accent" class="name">Top games</button>
-        <button mat-button color="accent">1</button>
-        <button mat-button color="accent">X</button>
-        <button mat-button color="accent">2</button>
-        <button mat-button color="accent">X1</button>
-        <button mat-button color="accent">X2</button>
-        <button mat-button color="accent">12</button>
-  </mat-list-item>
-  <div *ngFor="let offer of offers">
-  <mat-list-item *ngIf="offer.special">
-      <button mat-button class="name">{{offer.game}}</button>
-      <button mat-raised-button [ngClass]="{
+            (click)="selectBettingOffer12(offer)">{{offer.oddsFor12}}</button>
+          <mat-divider></mat-divider>
+        </mat-list-item>
+        <mat-list-item>
+          <button mat-button color="accent" class="name">Top games</button>
+          <button mat-button color="accent">1</button>
+          <button mat-button color="accent">X</button>
+          <button mat-button color="accent">2</button>
+          <button mat-button color="accent">X1</button>
+          <button mat-button color="accent">X2</button>
+          <button mat-button color="accent">12</button>
+        </mat-list-item>
+        <div *ngFor="let offer of offers">
+          <mat-list-item *ngIf="offer.special">
+            <button mat-button class="name">{{offer.game}}</button>
+            <button mat-raised-button [ngClass]="{
       'accent-none': !offer.specialOddsFor1Selected,
       'accent': offer.specialOddsFor1Selected
     }"
-        (click)="selectSpecialOffer1(offer)">{{offer.specialOddsFor1}}</button>
-      <button mat-raised-button [ngClass]="{
+              (click)="selectSpecialOffer1(offer)">{{offer.specialOddsFor1}}</button>
+            <button mat-raised-button [ngClass]="{
       'accent-none': !offer.specialOddsForXSelected,
       'accent': offer.specialOddsForXSelected
     }"
-        (click)="selectSpecialOfferX(offer)">{{offer.specialOddsForX}}</button>
-      <button mat-raised-button [ngClass]="{
+              (click)="selectSpecialOfferX(offer)">{{offer.specialOddsForX}}</button>
+            <button mat-raised-button [ngClass]="{
       'accent-none': !offer.specialOddsFor2Selected,
       'accent': offer.specialOddsFor2Selected
     }"
-        (click)="selectSpecialOffer2(offer)">{{offer.specialOddsFor2}}</button>
-      <button mat-raised-button [ngClass]="{
+              (click)="selectSpecialOffer2(offer)">{{offer.specialOddsFor2}}</button>
+            <button mat-raised-button [ngClass]="{
       'accent-none': !offer.specialOddsForX1Selected,
       'accent': offer.specialOddsForX1Selected
     }"
-        (click)="selectSpecialOfferX1(offer)">{{offer.specialOddsForX1}}</button>
-      <button mat-raised-button [ngClass]="{
+              (click)="selectSpecialOfferX1(offer)">{{offer.specialOddsForX1}}</button>
+            <button mat-raised-button [ngClass]="{
       'accent-none': !offer.specialOddsForX2Selected,
       'accent': offer.specialOddsForX2Selected
     }"
-        (click)="selectSpecialOfferX2(offer)">{{offer.specialOddsForX2}}</button>
-      <button mat-raised-button [ngClass]="{
+              (click)="selectSpecialOfferX2(offer)">{{offer.specialOddsForX2}}</button>
+            <button mat-raised-button [ngClass]="{
           'accent-none': !offer.specialOddsFor12Selected,
           'accent': offer.specialOddsFor12Selected
         }"
-        (click)="selectSpecialOffer12(offer)">{{offer.specialOddsFor12}}</button>
-    <mat-divider></mat-divider>
-  </mat-list-item>
-</div>
-</mat-list>
-</mat-grid-tile> 
-<mat-grid-tile colspan="1">
-  <mat-card>
-    <app-tickets></app-tickets>
-  </mat-card>
-</mat-grid-tile>
-</mat-grid-list>
+              (click)="selectSpecialOffer12(offer)">{{offer.specialOddsFor12}}</button>
+            <mat-divider></mat-divider>
+          </mat-list-item>
+        </div>
+      </mat-list>
+    </mat-grid-tile>
+    <mat-grid-tile colspan="1">
+      <mat-card>
+        <app-tickets></app-tickets>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
 </mat-card>

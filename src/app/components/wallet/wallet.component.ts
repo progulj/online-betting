@@ -8,27 +8,49 @@ import { IWallet } from '../../interfaces/IWallet';
   styleUrls: ['./wallet.component.scss']
 })
 export class WalletComponent implements OnInit {
-  private amount: number;
   private wallet: IWallet;
-  private walletBalance: number;
+  private amount: number;
+  private isMinimum: boolean;
+  private isMaximum: boolean;
 
   constructor(private walletService: WalletService) {
-    this.walletBalance = 0;
+    this.wallet = {
+      id: null,
+      walletBalance: 0,
+      account: null,
+      date: null,
+      amount: null
+    };
+    this.resetWarnings();
+    this.amount = 0;
   }
 
   ngOnInit() {
     this.walletService.wallet$.subscribe(
       wallet => {
         this.wallet = wallet;
-        this.walletBalance = wallet.walletBalance;
       });
     this.walletService.get();
   }
 
   addFunds(): void {
-    this.walletBalance = this.walletBalance + +this.amount;
-    this.wallet.walletBalance = this.walletBalance;
-    this.walletService.post(this.wallet);
+    this.resetWarnings();
+    if (this.amount && this.amount >= 10 && this.amount <= 100) {
+      this.wallet.amount = this.amount;
+      this.walletService.post(this.wallet);
+      this.amount = null;
+    } else {
+      if (this.amount < 10) {
+        this.isMinimum = true;
+      } else if (this.amount > 100) {
+        this.isMaximum = true;
+      }
+    }
+  }
+
+  resetWarnings() {
+    this.isMinimum = false;
+    this.isMaximum = false;
   }
 
 }

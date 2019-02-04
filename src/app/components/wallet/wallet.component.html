@@ -9,10 +9,15 @@
       <mat-divider [inset]="true"></mat-divider>
     </div>
     <div>
-      <p>Current Balance: {{ walletBalance }}$</p>
+      <p>Account: {{ wallet?.account }}</p>
+    </div>
+    <div>
+      <p>Current Balance: {{ wallet?.walletBalance }}$ on {{ wallet?.date | date:'dd MMM yyyy HH:mm'}}</p>
     </div>
     <mat-form-field>
-      <input matInput autocomplete="off" placeholder="Add Funds" [(ngModel)]="amount" appTwoDigitDecimalNumber>
+      <input matInput autocomplete="off" placeholder="Add Funds" [(ngModel)]="amount" appTwoDigitDecimalNumber (focusin)="resetWarnings()">
+      <div class="warn" *ngIf="isMinimum">Minimum payment is 10$!</div>
+      <div class="warn" *ngIf="isMaximum">Maximum payment is 100$!</div>
     </mat-form-field>
     <div>
       <button mat-raised-button color="primary" (click)="addFunds()"> Add </button>

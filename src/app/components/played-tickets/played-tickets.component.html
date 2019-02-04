@@ -10,7 +10,7 @@
         <mat-expansion-panel-header>
           <mat-panel-title>
             <ng-container *ngIf="ticket.status;else inplay">
-              <ng-container *ngIf="ticket.status === 2;else winning">
+              <ng-container *ngIf="ticket.status === '2';else winning">
                 <mat-icon>thumb_down</mat-icon>
                 <div class="fail">losing ticket ...</div>
               </ng-container>
@@ -47,8 +47,8 @@
           </mat-grid-list>
           <mat-grid-list cols="1" rowHeight="30px">
             <mat-grid-tile *ngFor="let game of ticket.games" row="1">
-              <div class="game">{{game.game}}</div>
-              <div class="game">{{game.oddsType}}</div>
+              <div class="game">{{game.name}}</div>
+              <div class="game">{{ types[game.oddsType]}}</div>
               <div class="game">{{game.odds}}</div>
             </mat-grid-tile>
           </mat-grid-list>

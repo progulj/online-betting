@@ -18,7 +18,7 @@ export class OfferService {
   private offerUrl: string;
 
   constructor(private httpClient: HttpClient) {
-    this.offerUrl = 'http://localhost:3000/offers';
+    this.offerUrl = 'http://localhost:27255/offers';
     this.offersSubject = new Subject<IOfferView[]>();
     this.offers$ = this.offersSubject.asObservable();
     this.offerSubject = new Subject<any>();

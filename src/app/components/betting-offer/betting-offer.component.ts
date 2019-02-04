@@ -18,12 +18,9 @@ export class BettingOfferComponent implements OnInit {
   ngOnInit() {
     this.offers = [];
     this.getOffers();
-    this.offerService.offer$.subscribe(
-      offer => {
-        this.removeOfferSelection(offer.id, offer.deselectSpecial, offer.selectionToRevert);
-      });
-      this.colums = (window.innerWidth <= 700) ? 1 : 3;
-      this.offersColspan = (window.innerWidth <= 700) ? 1 : 2;
+    this.suscribeOffer();
+    this.colums = (window.innerWidth <= 700) ? 1 : 3;
+    this.offersColspan = (window.innerWidth <= 700) ? 1 : 2;
   }
 
 
@@ -32,20 +29,14 @@ export class BettingOfferComponent implements OnInit {
     this.offersColspan = (window.innerWidth <= 700) ? 1 : 2;
   }
 
-
-
-  removeOfferSelection(id: number, deselectSpecial: boolean, selectionToRevert: string) {
-    const bettingOffer = this.offers.find(offer => offer.id === id);
-    if (deselectSpecial) {
-      this.deselectSpecialOffer(bettingOffer);
-      this.revertSelectionOnBettingOffer(selectionToRevert, bettingOffer);
-    } else {
-      this.deselectBettingOffer(bettingOffer);
-    }
-    this.offers = this.offers.filter(offer => offer.id !== id);
-    this.offers.push(bettingOffer);
-    this.sortById();
+  suscribeOffer() {
+    this.offerService.offer$.subscribe(
+      offer => {
+        this.removeOfferSelection(offer.id, offer.deselectSpecial, offer.selectionToRevert);
+      });
   }
+
+
 
   getOffers(): void {
     this.offerService.offers$.subscribe(offers => this.offers = offers);
@@ -66,7 +57,7 @@ export class BettingOfferComponent implements OnInit {
       const toggleSelection = !selectedOffer.oddsForXSelected;
       this.deselectBettingOffer(selectedOffer);
       selectedOffer.oddsForXSelected = toggleSelection;
-      this.ticketService.addGame(selectedOffer, selectedOffer.oddsForX, 'X', toggleSelection, false);
+      this.ticketService.addGame(selectedOffer, selectedOffer.oddsForX, '2', toggleSelection, false);
     }
   }
 
@@ -75,7 +66,7 @@ export class BettingOfferComponent implements OnInit {
       const toggleSelection = !selectedOffer.oddsFor2Selected;
       this.deselectBettingOffer(selectedOffer);
       selectedOffer.oddsFor2Selected = toggleSelection;
-      this.ticketService.addGame(selectedOffer, selectedOffer.oddsFor2, '2', toggleSelection, false);
+      this.ticketService.addGame(selectedOffer, selectedOffer.oddsFor2, '3', toggleSelection, false);
     }
   }
 
@@ -84,7 +75,7 @@ export class BettingOfferComponent implements OnInit {
       const toggleSelection = !selectedOffer.oddsForX1Selected;
       this.deselectBettingOffer(selectedOffer);
       selectedOffer.oddsForX1Selected = toggleSelection;
-      this.ticketService.addGame(selectedOffer, selectedOffer.oddsForX1, 'X1', toggleSelection, false);
+      this.ticketService.addGame(selectedOffer, selectedOffer.oddsForX1, '4', toggleSelection, false);
     }
   }
 
@@ -93,7 +84,7 @@ export class BettingOfferComponent implements OnInit {
       const toggleSelection = !selectedOffer.oddsForX2Selected;
       this.deselectBettingOffer(selectedOffer);
       selectedOffer.oddsForX2Selected = toggleSelection;
-      this.ticketService.addGame(selectedOffer, selectedOffer.oddsForX2, 'X2', toggleSelection, false);
+      this.ticketService.addGame(selectedOffer, selectedOffer.oddsForX2, '5', toggleSelection, false);
     }
   }
 
@@ -102,7 +93,7 @@ export class BettingOfferComponent implements OnInit {
       const toggleSelection = !selectedOffer.oddsFor12Selected;
       this.deselectBettingOffer(selectedOffer);
       selectedOffer.oddsFor12Selected = toggleSelection;
-      this.ticketService.addGame(selectedOffer, selectedOffer.oddsFor12, '12', toggleSelection, false);
+      this.ticketService.addGame(selectedOffer, selectedOffer.oddsFor12, '6', toggleSelection, false);
     }
   }
 
@@ -120,7 +111,7 @@ export class BettingOfferComponent implements OnInit {
       const toggleSelection = !selectedOffer.specialOddsForXSelected;
       this.deselectBettingOffer(selectedOffer);
       selectedOffer.specialOddsForXSelected = toggleSelection;
-      this.ticketService.addGame(selectedOffer, selectedOffer.specialOddsForX, 'X', toggleSelection, true);
+      this.ticketService.addGame(selectedOffer, selectedOffer.specialOddsForX, '2', toggleSelection, true);
     }
   }
 
@@ -129,7 +120,7 @@ export class BettingOfferComponent implements OnInit {
       const toggleSelection = !selectedOffer.specialOddsFor2Selected;
       this.deselectBettingOffer(selectedOffer);
       selectedOffer.specialOddsFor2Selected = toggleSelection;
-      this.ticketService.addGame(selectedOffer, selectedOffer.specialOddsFor2, '2', toggleSelection, true);
+      this.ticketService.addGame(selectedOffer, selectedOffer.specialOddsFor2, '3', toggleSelection, true);
     }
   }
 
@@ -138,7 +129,7 @@ export class BettingOfferComponent implements OnInit {
       const toggleSelection = !selectedOffer.specialOddsForX1Selected;
       this.deselectBettingOffer(selectedOffer);
       selectedOffer.specialOddsForX1Selected = toggleSelection;
-      this.ticketService.addGame(selectedOffer, selectedOffer.specialOddsForX1, 'X1', toggleSelection, true);
+      this.ticketService.addGame(selectedOffer, selectedOffer.specialOddsForX1, '4', toggleSelection, true);
     }
   }
 
@@ -147,7 +138,7 @@ export class BettingOfferComponent implements OnInit {
       const toggleSelection = !selectedOffer.specialOddsForX2Selected;
       this.deselectBettingOffer(selectedOffer);
       selectedOffer.specialOddsForX2Selected = toggleSelection;
-      this.ticketService.addGame(selectedOffer, selectedOffer.specialOddsForX2, 'X2', toggleSelection, true);
+      this.ticketService.addGame(selectedOffer, selectedOffer.specialOddsForX2, '5', toggleSelection, true);
     }
   }
 
@@ -156,8 +147,21 @@ export class BettingOfferComponent implements OnInit {
       const toggleSelection = !selectedOffer.specialOddsFor12Selected;
       this.deselectBettingOffer(selectedOffer);
       selectedOffer.specialOddsFor12Selected = toggleSelection;
-      this.ticketService.addGame(selectedOffer, selectedOffer.specialOddsFor12, '12', toggleSelection, true);
+      this.ticketService.addGame(selectedOffer, selectedOffer.specialOddsFor12, '6', toggleSelection, true);
     }
+  }
+
+  removeOfferSelection(id: number, deselectSpecial: boolean, selectionToRevert: string) {
+    const bettingOffer = this.offers.find(offer => offer.id === id);
+    if (deselectSpecial) {
+      this.deselectSpecialOffer(bettingOffer);
+      this.revertSelectionOnBettingOffer(selectionToRevert, bettingOffer);
+    } else {
+      this.deselectBettingOffer(bettingOffer);
+    }
+    this.offers = this.offers.filter(offer => offer.id !== id);
+    this.offers.push(bettingOffer);
+    this.sortById();
   }
 
   deselectBettingOffer(offer: IOfferView) {
