@@ -101,7 +101,7 @@ export class TicketsComponent implements OnInit {
           this.wallet = wallet;
         });
       this.ticket.games.forEach(gameToDeselect => {
-        this.offerService.deselectOffer(gameToDeselect.idOffer, gameToDeselect.special, gameToDeselect.oddsType);
+        this.offerService.deselectOffer(gameToDeselect.idOffer, false, gameToDeselect.oddsType);
       });
       this.setTicketToDefaultState();
       this.walletService.get();
