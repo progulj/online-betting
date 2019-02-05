@@ -1,5 +1,4 @@
-<mat-card>
-  <mat-grid-list [cols]="colums" (window:resize)="onResize($event)">
+<mat-grid-list align-items-xs-flex-start [cols]="colums" (window:resize)="onResize($event)">
     <mat-grid-tile [colspan]="offersColspan">
       <mat-list>
         <mat-list-item>
@@ -93,9 +92,7 @@
       </mat-list>
     </mat-grid-tile>
     <mat-grid-tile colspan="1">
-      <mat-card>
         <app-tickets></app-tickets>
-      </mat-card>
     </mat-grid-tile>
   </mat-grid-list>
-</mat-card>
+

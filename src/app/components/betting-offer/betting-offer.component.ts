@@ -185,17 +185,17 @@ export class BettingOfferComponent implements OnInit {
   }
 
   revertSelectionOnBettingOffer(selection: string, offer: IOfferView) {
-    if ('X' === selection) {
+    if ('2' === selection) {
       offer.oddsForXSelected = true;
-    } else if ('X1' === selection) {
+    } else if ('4' === selection) {
       offer.oddsForX1Selected = true;
-    } else if ('X2' === selection) {
+    } else if ('5' === selection) {
       offer.oddsForX2Selected = true;
     } else if ('1' === selection) {
       offer.oddsFor1Selected = true;
-    } else if ('2' === selection) {
+    } else if ('3' === selection) {
       offer.oddsFor2Selected = true;
-    } else if ('12' === selection) {
+    } else if ('6' === selection) {
       offer.oddsFor12Selected = true;
     }
   }

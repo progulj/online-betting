@@ -1,30 +1,33 @@
-
-
-.mat-card {
+.mat-grid-list {
     width: 100%;
-    margin: 1em auto;
-    
-}
-.mat-list{
-    width: 100%;
-    min-width: 500px;
-    font-size: 12px;
-    
-    
-    .mat-list-item{
+    height: 50%;
+  .mat-grid-tile {
+    width: 70%;
+    height: 50%;
+
+      .mat-list {
         width: 100%;
-        .name{
+        font-size: 12px;
+
+
+        .mat-list-item {
+          width: 80%;
+
+          .name {
             width: 40%
-        }
-        .primary{
+          }
+
+          .primary {
             background-color: #3f51b5;
             color: beige;
-        }
-        .accent{
+          }
+
+          .accent {
             background-color: #ff4081;
             color: beige;
+          }
         }
-    }
-    
-}
 
+      }
+    }
+}
